@@ -64,8 +64,8 @@ rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(1, 2)
 print(f"Random/Baseline Accuracy: {rand_acc}")
 print(f"Testing Accuracy: {sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))}")
 
-""" DEBUG
-unique, counts = np.unique(svm.predict(X_test), return_counts=True) # debug
-print(f"unique: {unique}, counts: {counts}, len: {len(svm.predict(X_test))}") # debug
-print(f"X_test:\n{X_test}") # debug
-"""
+""" DEBUG """
+unique, counts = np.unique(svm.predict(X_test), return_counts=True)  # debug
+print(f"X_test unique: {unique}, counts: {counts}, len: {len(svm.predict(X_test))}")  # debug
+unique, counts = np.unique(y_test, return_counts=True)  # debug
+print(f"y_test unique: {unique}, counts: {counts}")  # debug
