@@ -48,8 +48,7 @@ if choice is "bow":
 
     cv = CountVectorizer()
     bag = cv.fit_transform(X)
-
-if choice is "enc":
+elif choice is "enc":
     # combine dataset temporarily for one-hot encoding
     # X = np.concatenate((X_train, X_test))
     max_num_features = max(max(map(len, X_train)), max(map(len, X_test)))
@@ -67,6 +66,8 @@ if choice is "enc":
     split = X_train.shape[0]
     X_train = X[0:split]
     X_test = X[split:X.shape[0]]  # rest
+elif choice is "vectorize":
+    pass  # TODO: vectorize; ML models need features, not just whole tweets; idea: cv(5,10)
 
 # Shuffle data (keeps indices)
 X_train, y_train = shuffle(X_train, y_train)

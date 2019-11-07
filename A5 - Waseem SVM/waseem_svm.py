@@ -42,14 +42,18 @@ if choice is "enc":
     split = X_train.shape[0]
     X_train = X[0:split]
     X_test = X[split:X.shape[0]]  # last chunk / rest
+elif choice is "vectorize":
+    pass  # TODO: vectorize; ML models need features, not just whole tweets; idea: cv(5,10)
 
 # Shuffle data (keeps indices)
 X_train, y_train = shuffle(X_train, y_train)
 X_test, y_test = shuffle(X_test, y_test)
 
 # Fitting the model
+print("Training...")
 svm = SVC(kernel="linear", gamma="auto")
 svm.fit(X_train, y_train)
+print("Training complete.\n")
 
 """ KERNEL RESULTS
 rbf: 0.6844783715012722
