@@ -30,7 +30,8 @@ a.close()
 
 # Feature engineering: vectorizer
 # ML models need features, not just whole tweets
-vec = CountVectorizer(analyzer='word', ngram_range=(1, 5))  # TODO: tweak params
+ngram_upper_bound = 5
+vec = CountVectorizer(analyzer='word', ngram_range=(1, ngram_upper_bound))  # TODO: tweak params
 X_train = vec.fit_transform(X_train)
 X_test = vec.transform(X_test)
 
@@ -59,5 +60,5 @@ print(f"Testing Accuracy: {sklearn.metrics.accuracy_score(y_test, svm.predict(X_
 
 """ PARAM TESTING (kernel="linear")
 ngram_range(1,3): 0.8549618320610687
-ngram_range(1,5): 
+ngram_range(1,5): 0.8473282442748091
 """
