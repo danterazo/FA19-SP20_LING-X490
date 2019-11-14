@@ -30,8 +30,11 @@ a.close()
 
 # Feature engineering: vectorizer
 # ML models need features, not just whole tweets
-ngram_upper_bound = 5
-vec = CountVectorizer(analyzer='word', ngram_range=(1, ngram_upper_bound))  # TODO: tweak params
+print("COUNTVECTORIZER CONFIG\n----------------------")
+analyzer = input("Please enter analyzer: ")
+ngram_upper_bound = input("Please enter ngram_upper_bound: ")
+
+vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(ngram_upper_bound)))  # TODO: word vs char, ngram_range
 X_train = vec.fit_transform(X_train)
 X_test = vec.transform(X_test)
 
@@ -40,7 +43,7 @@ X_train, y_train = shuffle(X_train, y_train)
 X_test, y_test = shuffle(X_test, y_test)
 
 # Fitting the model
-print("Training...")
+print("\nTraining...")
 svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
 svm.fit(X_train, y_train)
 print("Training complete.\n")
@@ -58,9 +61,13 @@ rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(1, 2)
 print(f"Random/Baseline Accuracy: {rand_acc}")
 print(f"Testing Accuracy: {sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))}")
 
-# TODO: random forest
-
-""" PARAM TESTING (kernel="linear")
-ngram_range(1,3): 0.8549618320610687
-ngram_range(1,5): 0.8473282442748091
+""" CV PARAM TESTING (kernel="linear")
+word, ngram_range(1,2):  0.8606870229007634
+word, ngram_range(1,3):  0.8549618320610687
+word, ngram_range(1,5):  0.8473282442748091
+word, ngram_range(1,10): 0.8358778625954199
+char, ngram_range(1,2):  
+char, ngram_range(1,3):  
+char, ngram_range(1,5):  
+char, ngram_range(1,10): 
 """
