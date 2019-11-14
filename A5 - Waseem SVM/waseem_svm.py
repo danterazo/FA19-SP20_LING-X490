@@ -35,6 +35,7 @@ analyzer = input("Please enter analyzer: ")
 ngram_upper_bound = input("Please enter ngram_upper_bound: ")
 
 vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(ngram_upper_bound)))  # TODO: word vs char, ngram_range
+print("\nFitting CV...")
 X_train = vec.fit_transform(X_train)
 X_test = vec.transform(X_test)
 
@@ -43,7 +44,7 @@ X_train, y_train = shuffle(X_train, y_train)
 X_test, y_test = shuffle(X_test, y_test)
 
 # Fitting the model
-print("\nTraining...")
+print("Training SVM...")
 svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
 svm.fit(X_train, y_train)
 print("Training complete.\n")
