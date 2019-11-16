@@ -49,7 +49,7 @@ svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
 svm.fit(X_train, y_train)
 print("Training complete.\n")
 
-""" KERNEL RESULTS (gamma="auto"), ngram_range(1,3)
+""" KERNEL RESULTS gamma="auto", analyzer=word, ngram_range(1,3)
 linear: 0.8549618320610687
 rbf: 0.6844783715012722
 poly: 0.6844783715012722
@@ -67,8 +67,10 @@ word, ngram_range(1,2):  0.8606870229007634
 word, ngram_range(1,3):  0.8549618320610687
 word, ngram_range(1,5):  0.8473282442748091
 word, ngram_range(1,10): 0.8358778625954199
+word, ngram_range(1,20): 0.8326972010178118
 char, ngram_range(1,2):  0.8225190839694656
 char, ngram_range(1,3):  0.8206106870229007
-char, ngram_range(1,5):  
-char, ngram_range(1,10): 
+char, ngram_range(1,5):  0.8473282442748091
+char, ngram_range(1,10): 0.8473282442748091
+char, ngram_range(1,20): 0.8575063613231552
 """
