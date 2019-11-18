@@ -4,6 +4,3 @@
 [submodule "Department/jlcl-offensive"]
 	path = Department/jlcl-offensive
 	url = https://github.com/chenyueg/jlcl-offensive.git
-[submodule "Department/sklearn-demo"]
-	path = Department/sklearn-demo
-	url = https://github.iu.edu/ksteimel/sklearn-demo.git
