@@ -1,11 +1,6 @@
 .idea/
 Misc/
-Department/
-Department/jlcl-offensive/
-Department/mal-detection/
+
 Department/sklearn-demo/
 
 A5 - Waseem SVM/data_mtx/
-
-!/Department/keras_demo_L715.ipynb
-!/Department/keras_demo_L715.py
