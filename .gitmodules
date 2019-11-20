@@ -9,4 +9,4 @@
 [submodule "Department/sklearn-demo"]
 	path = Department/sklearn-demo
 	url = https://github.iu.edu/ksteimel/sklearn-demo.git
-	ignore = dirty
+	ignore = all
