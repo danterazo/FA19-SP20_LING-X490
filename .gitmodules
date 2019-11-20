@@ -1,12 +1,12 @@
 [submodule "Department/mal-detection"]
 	path = Department/mal-detection
 	url = https://github.iu.edu/yc59/mal-detection.git
-	ignore = all
+	ignore = dirty
 [submodule "Department/jlcl-offensive"]
 	path = Department/jlcl-offensive
 	url = https://github.com/chenyueg/jlcl-offensive.git
-	ignore = all
+	ignore = dirty
 [submodule "Department/sklearn-demo"]
 	path = Department/sklearn-demo
 	url = https://github.iu.edu/ksteimel/sklearn-demo.git
-	ignore = all
+	ignore = dirty
