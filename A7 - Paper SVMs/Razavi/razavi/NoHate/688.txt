@@ -1,0 +1,1 @@
+I am not sure how to check a variable that was assigned a value from cin for an integer. I see two ways , one is using isdigit ( varname ) but i cant seem to get my borland c + + compiler to work. The other way is using a case statement ( switch ) where i give it all the possible choice , but there must be a better way no ? ? Before you buy . 

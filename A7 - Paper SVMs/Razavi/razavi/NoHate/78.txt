@@ -1,0 +1,1 @@
+When I set the focus in the LostFocus event , we see the focus leaving and returning to it and the GotFocus and LostFocus events are raised in the other control , and it is that that I dont want. Etienne Charland 

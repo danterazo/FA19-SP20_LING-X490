@@ -1,0 +1,1 @@
+i want a program where my ip will show other people a diffrent ip address.any other tips to close netbios or sucure port 139 i did a few things but extra seercurity for itthank-you . 

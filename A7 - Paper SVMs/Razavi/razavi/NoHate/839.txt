@@ -1,0 +1,1 @@
+EscapeGL is on my machine wonderful stable. To find out which component has a bug , disable ALL the Dive settings. If it traps after that it is a escgl error ( I think ) , otherwise it is the screendriver. Arjen 

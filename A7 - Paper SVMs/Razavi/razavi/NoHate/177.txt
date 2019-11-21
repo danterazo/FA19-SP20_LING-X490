@@ -1,0 +1,1 @@
+there was a big discussion particular to the program which you speak of ( Britannica ) , search deja news for it , sorry I am not familiar enought to recap it for you. Daniel Basic discussion is that Britanica worked fine under Warp 3 but will NOT function under Warp 4 because of API changes . 

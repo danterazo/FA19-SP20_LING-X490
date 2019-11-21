@@ -1,0 +1,1 @@
+You already said it , load the prog and replace unsupported components with the new ones Hi all , I am creating release 2 of an app. I did in VB5. I want to create it in VB6. It uses the Internet Transfer control. Whats the best way to do the conversion ? Load the program in VB6 and change the component files ? Thanks , Mike T . 

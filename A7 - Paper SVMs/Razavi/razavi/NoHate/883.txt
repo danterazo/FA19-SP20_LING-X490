@@ -1,0 +1,1 @@
+Dave , thanks for your long message ! Do you know whether the SBLive always resamples , even if the frequency is the same ( 44.1 kHz ) ? Can it synchronize itself to such a signal or will it still resample ? Hans-Georg [ No mail please ] 

@@ -1,0 +1,1 @@
+Also , if you go to a command prompt and type the command " SET TEMP " or " SET TMP " , are they set to a directory on a drive with much free space ? Also check that " temp " and " tmp " are pointing to a subdirectory , not the root of a drive. i.e. temp = x : \ temp \ , NOT temp = x : \ . 

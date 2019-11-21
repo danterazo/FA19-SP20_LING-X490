@@ -1,0 +1,1 @@
+I am using a linked list that I would like to store in a file so I could reload it into memory at a later date. Does anyone know how to do this or know of any resources I could check out. Thanks Len [ about comp.lang.c + + .moderated. First time posters : do this ! ] 

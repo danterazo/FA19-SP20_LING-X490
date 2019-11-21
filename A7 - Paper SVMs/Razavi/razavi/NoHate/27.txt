@@ -1,0 +1,1 @@
+Yes , and even g77 " only " uses the f2c converter. That is simply not true. Where did you get this " data " . Richard Maine 

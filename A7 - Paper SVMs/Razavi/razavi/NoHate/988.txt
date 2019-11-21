@@ -1,0 +1,1 @@
+A voltage regulator is a circuit which maintains a constant voltage despite variations in load current. A voltage regulator is also very useful to prevent variations in the raw supply voltage from affecting the output voltage even when the load current is constant. Jim 

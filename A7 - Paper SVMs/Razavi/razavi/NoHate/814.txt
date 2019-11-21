@@ -1,0 +1,1 @@
+FWIW , I have moved entire OS/2 systems from one hard disk to a new one by using BA/2 command line-disk driven restore 

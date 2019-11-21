@@ -1,0 +1,1 @@
+I have a firewall with everything inbound blocked except port 80. Are there Thanks , -Caliphalestrian This url will check your web server for many known port 80 exploits. substitutes. We check open ports , cgi vulnerability , Netbios and more . 

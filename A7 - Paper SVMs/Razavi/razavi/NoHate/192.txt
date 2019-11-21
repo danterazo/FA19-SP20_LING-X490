@@ -1,0 +1,1 @@
+The Scott Meyers books on " nn ways to improve your C + + " and some of the compilation books from C + + reports do a good job of what you are looking for. As of late it seems like every question I have been asking has been classified as a " classic C + + problem " or " an example of pure evil in C + + " . [ remainder deleted for brevity ] 

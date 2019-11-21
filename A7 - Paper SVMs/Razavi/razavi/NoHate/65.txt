@@ -1,0 +1,1 @@
+Why is this : # include iostream.h int main ( ) { cout ( 34 , 67 ) endl ; retrun 0 ; } Result : 67. It always prints out the last parameter inside the parentheses. Because , comma , is an operator. It discards the value. i.e. 67 is left behind. What you want can be done by cout " ( 34,67 ) " ; or cout ( 34,67 ) ; Thanks for the answer. cheers , Shiva 

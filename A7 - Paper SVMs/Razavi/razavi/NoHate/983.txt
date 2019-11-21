@@ -1,0 +1,1 @@
+After all , the semantics of array operations can be achieved with DO loops. No , it is precisely the fact that the DO loop does _not_ express array semantics that they were included in the standard. Think aliasing and parallel operations. Jan 

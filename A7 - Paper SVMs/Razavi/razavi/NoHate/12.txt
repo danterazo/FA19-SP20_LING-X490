@@ -1,0 +1,1 @@
+You might be interested that the unbuffered version of the 4049 can be used as a MOSFET as well. there is also an HCU04 

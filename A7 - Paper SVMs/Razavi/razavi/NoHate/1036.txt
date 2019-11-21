@@ -1,0 +1,1 @@
+" What am I misreading , here ? " Ah. Reactance ! = Impedance. Xc = minus foo/z. Duh. This shows up in bode plots as a monotonic phase curve : The frequency increases = the reactance increases = the imaginary component increases = the phase increases. Blair " Unless I got that wrong , too. " 

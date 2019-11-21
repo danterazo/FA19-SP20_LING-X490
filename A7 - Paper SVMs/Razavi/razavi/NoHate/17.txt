@@ -1,0 +1,1 @@
+you cant change your IP or else you wont get anything to your box only way to do this is find a UNIX shell service and ask if they offer vhost service. hope this helps Adonis i want a program where my ip will show other people a diffrent ip address.any other tips to close netbios or sucure port 139 i did a few things but extra seercurity for itthank-you . 

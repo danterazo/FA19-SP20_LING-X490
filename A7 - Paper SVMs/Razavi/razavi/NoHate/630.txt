@@ -1,0 +1,1 @@
+I have a firewall with everything inbound blocked except port 80. Are there Tons of them. You should only allow outbound connections on port 80 , unless you are running a web server ( which you dont mention ) . 

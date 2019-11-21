@@ -1,0 +1,1 @@
+The two disks that was 0-byte ( xr_m012.gdk and xr_m012.hdk ) till recently seems to be ok now. regards , Jan Jan Eri Protector AS Norway 

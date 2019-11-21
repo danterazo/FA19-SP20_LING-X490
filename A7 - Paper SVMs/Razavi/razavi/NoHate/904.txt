@@ -1,0 +1,1 @@
+Can we use numeric values as names for the error handlers. For eg. Sub ( ) On Error Got 0 : Exit Sub : 0 : ER End Sub Posted via CNET Help.com 
