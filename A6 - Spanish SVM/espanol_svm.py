@@ -9,23 +9,19 @@ import random
 
 # Import data
 # TODO: idea: remove http://t.co/* links
-""" ESPANOL TASKS: 
-1. Remove ID
-2. Split test, train into X/Y
-3. Profit
-"""
 data_dir = "./data"
 language = "es"
-fixed = "_fixed" # remove if you want to use the original data
-a = open(f"{data_dir}/public_development_{language}/train_{language}{fixed}.tsv", encoding="utf-8")
-train = a.read().splitlines()
-#print(f"head: {train[1:5]}")
-# from_csv('c:/~/trainSetRel3.txt', sep='\t')
+fixed = "_fixed"  # empty string if you want to use the original data
 
-a = open(f"{data_dir}/reference_test_{language}/{language}.tsv", encoding="utf-8")
-test = a.read().splitlines()
+X_train = pd.read_csv(f"{data_dir}/public_development_{language}/train_{language}{fixed}.tsv", sep='\t').iloc[:, 1]
+X_test = pd.read_csv(f"{data_dir}/reference_test_{language}/{language}.tsv", sep='\t').iloc[:, 1]
 
+# y = range(2, 5)  # classes
+y = 2  # HS = "Hate Speech"? making a big assumption here
+y_train = pd.read_csv(f"{data_dir}/public_development_{language}/train_{language}{fixed}.tsv", sep='\t').iloc[:, y]
+y_test = pd.read_csv(f"{data_dir}/reference_test_{language}/{language}.tsv", sep='\t').iloc[:, y]
 
+# print(f"head:\n{y_test.value_counts()}")  # debugging; error: "y_pred contains classes not in y_true"
 
 # Feature engineering: vectorizer
 # ML models need features, not just whole tweets
