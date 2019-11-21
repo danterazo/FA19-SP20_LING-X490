@@ -35,7 +35,7 @@ ngram_upper_bound = input("Please enter ngram upper bound(s): ").split()
 
 for i in ngram_upper_bound:
     X_train, X_test, y_train, y_test = get_data()
-    verbose = False  # print statement flag
+    verbose = True  # print statement flag
 
     vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
     print("\nFitting CV...") if verbose else None
