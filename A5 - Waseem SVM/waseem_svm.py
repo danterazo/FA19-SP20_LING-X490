@@ -4,24 +4,23 @@ from sklearn.svm import SVC
 from sklearn.utils import shuffle
 from sklearn.feature_extraction.text import CountVectorizer
 import sklearn.metrics
-import numpy as np
 import random
 
 # Import data
 # TODO: idea: remove http://t.co/* links
 data_dir = "./data/"
-a = open(data_dir + "X_train", "r", encoding="utf-8")
+a = open(f"{data_dir}X_train", "r", encoding="utf-8")
 X_train = a.read().splitlines()
 
-a = open(data_dir + "X_test", "r", encoding="utf-8")
+a = open(f"{data_dir}X_test", "r", encoding="utf-8")
 X_test = a.read().splitlines()
 
-a = open(data_dir + "y_train", "r", encoding="utf-8")
+a = open(f"{data_dir}y_train", "r", encoding="utf-8")
 y_train = a.read().splitlines()
 for i in range(0, len(y_train)):
     y_train[i] = int(y_train[i])
 
-a = open(data_dir + "y_test", "r", encoding="utf-8")
+a = open(f"{data_dir}y_test", "r", encoding="utf-8")
 y_test = a.read().splitlines()
 for i in range(0, len(y_test)):
     y_test[i] = int(y_test[i])

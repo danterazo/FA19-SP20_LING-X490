@@ -4,14 +4,42 @@ from sklearn.svm import SVC
 from sklearn.utils import shuffle
 from sklearn.feature_extraction.text import CountVectorizer
 import sklearn.metrics
-import numpy as np
+import pandas as pd
 import random
 
 # Import data
 # TODO: idea: remove http://t.co/* links
+""" ESPANOL TASKS: 
+1. Remove ID
+2. Split test, train into X/Y
+3.
+"""
+data_dir = "./data/"
+language = "es"
+a = open(f"{data_dir}/public_development_{language}/train_{language}.tsv", encoding="utf-8")
+train = a.read().splitlines()
+print(f"head: {train[1:5,]}")
+# from_csv('c:/~/trainSetRel3.txt', sep='\t')
 
-# go to paper, see how they split kaggle dataset and split accordingly
-# let sandra know; we want the same data
+a = open(data_dir + "/public_development_" + language + "/train_" + language + ".tsv")
+test = a.read().splitlines()
+
+
+a = open(data_dir + "X_train", "r", encoding="utf-8")
+X_train = a.read().splitlines()
+
+a = open(data_dir + "X_test", "r", encoding="utf-8")
+X_test = a.read().splitlines()
+
+a = open(data_dir + "y_train", "r", encoding="utf-8")
+y_train = a.read().splitlines()
+for i in range(0, len(y_train)):
+    y_train[i] = int(y_train[i])
+
+a = open(data_dir + "y_test", "r", encoding="utf-8")
+y_test = a.read().splitlines()
+for i in range(0, len(y_test)):
+    y_test[i] = int(y_test[i])
 
 a.close()
 
