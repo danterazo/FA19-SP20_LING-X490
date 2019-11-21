@@ -5,6 +5,7 @@ from sklearn.utils import shuffle
 from sklearn.feature_extraction.text import CountVectorizer
 import sklearn.metrics
 import pandas as pd
+import numpy as np
 import random
 
 
@@ -18,16 +19,18 @@ def get_data():
     3. Split into test, train
     """
 
-    # TODO: remove NEWLINE_TOKEN; .replace("NEWLINE_TOKEN", "")
     data_dir = "./data"
 
-    hate = pd.read_csv(f"{data_dir}/hate.txt", sep='\t')
-    hate["Class"] = 1
+    hate = pd.read_csv(f"{data_dir}/hate.txt", encoding='utf-8', sep='\t')
+    noHate = pd.read_csv(f"{data_dir}/noHate.txt", encoding='utf-8', sep='\t')  # TODO: issues
+    y = [0] * len(hate) + [1] * len(noHate)
 
-    noHate = pd.read_csv(f"{data_dir}/noHate.txt", sep='\t')
-    noHate["Class"] = 1
+    # noHate["Class"] = 1 # new col, all 1s
 
-    # print(hate[1:5])  # debugging
+    print(hate[1:5])  # debugging
+    print(f"shape: {len(y)}")
+
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
     data = pd.read_csv(f"{data_dir}/hate.txt", sep='\t')
     train = data.loc[data['split'] == "train"]
