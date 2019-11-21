@@ -40,26 +40,26 @@ X_test, y_test = shuffle(X_test, y_test)
 
 # Fitting the model
 print("Training SVM...")
-svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
+svm = SVC(kernel="poly", gamma="auto")  # TODO: tweak params
 svm.fit(X_train, y_train)
 print("Training complete.\n")
 
 """ KERNEL RESULTS gamma="auto", analyzer=word, ngram_range(1,3)
-linear: 
-rbf: 
-poly: 
+linear: 0.7254534083802376
+rbf: 0.5872420262664165
+poly: 0.5872420262664165
 sigmoid: 
 precomputed: N/A, not supported
 """
 
 # Testing + results
-rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(1, 2) for x in range(0, len(y_test))])
+rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(0, 1) for x in range(0, len(y_test))])
 print(f"Random/Baseline Accuracy: {rand_acc}")
 print(f"Testing Accuracy: {sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))}")
 
 """ CV PARAM TESTING (kernel="linear")
 word, ngram_range(1,2):  
-word, ngram_range(1,3):  
+word, ngram_range(1,3): 0.7254534083802376
 word, ngram_range(1,5):  
 word, ngram_range(1,10): 
 char, ngram_range(1,2):  
