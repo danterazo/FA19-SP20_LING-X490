@@ -32,9 +32,10 @@ ngram_upper_bound = input("Please enter ngram upper bound(s): ").split()
 
 for i in ngram_upper_bound:
     X_train, X_test, y_train, y_test = get_data()
+    verbose = False  # print statement flag
 
     vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
-    print("\nFitting CV...")
+    print("\nFitting CV...") if verbose else None
     X_train = vec.fit_transform(X_train)
     X_test = vec.transform(X_test)
 
@@ -43,27 +44,28 @@ for i in ngram_upper_bound:
     X_test, y_test = shuffle(X_test, y_test)
 
     # Fitting the model
-    print("Training SVM...")
+    print("Training SVM...") if verbose else None
     svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
     svm.fit(X_train, y_train)
-    print("Training complete.\n")
-
-    """ KERNEL RESULTS gamma="auto", analyzer=word, ngram_range(1,3)
-    linear: 0.7254534083802376
-    rbf: 0.5872420262664165
-    poly: 0.5872420262664165
-    sigmoid: 0.5872420262664165
-    precomputed: N/A, not supported
-    """
+    print("Training complete.") if verbose else None
 
     # Testing + results
     rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(0, 1) for x in range(0, len(y_test))])
     acc_score = sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))
 
-    print(f"Random/Baseline Accuracy: {rand_acc:>36}")
-    print(f"Testing Accuracy ({analyzer}, ngram_range(1,{i})): {acc_score:<19}")
+    print(f"\nResults for ({analyzer}, ngram_range(1,{i}):")
+    print(f"Baseline Accuracy: {rand_acc:}")  # random
+    print(f"Testing Accuracy:  {acc_score:}")
 
-""" CountVectorizer PARAM TESTING (kernel="linear")
+""" RESULTS & DOCUMENTATION
+# KERNEL TESTING gamma="auto", analyzer=word, ngram_range(1,3)
+linear: 0.7254534083802376
+rbf: 0.5872420262664165
+poly: 0.5872420262664165
+sigmoid: 0.5872420262664165
+precomputed: N/A, not supported
+    
+# CountVectorizer PARAM TESTING (kernel="linear")
 word, ngram_range(1,2):  0.7229518449030644
 word, ngram_range(1,3):  0.7254534083802376
 word, ngram_range(1,5):  0.7329580988117573
