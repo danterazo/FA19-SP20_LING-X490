@@ -21,13 +21,14 @@ y = 2  # HS = "Hate Speech"? making a big assumption here
 y_train = pd.read_csv(f"{data_dir}/public_development_{language}/train_{language}{fixed}.tsv", sep='\t').iloc[:, y]
 y_test = pd.read_csv(f"{data_dir}/reference_test_{language}/{language}.tsv", sep='\t').iloc[:, y]
 
-# print(f"head:\n{y_test.value_counts()}")  # debugging; error: "y_pred contains classes not in y_true"
+# TODO: error: "y_pred contains classes not in y_true"
+# print(f"head:\n{y_test.value_counts()}")  # debugging for aforementioned error
 
 # Feature engineering: vectorizer
 # ML models need features, not just whole tweets
 print("COUNTVECTORIZER CONFIG\n----------------------")
 analyzer = input("Please enter analyzer: ")
-ngram_upper_bound = input("Please enter ngram_upper_bound: ")
+ngram_upper_bound = input("Please enter ngram upper bound(s): ") # TODO: accept range
 
 vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(ngram_upper_bound)))  # TODO: word vs char, ngram_range
 print("\nFitting CV...")
@@ -40,7 +41,7 @@ X_test, y_test = shuffle(X_test, y_test)
 
 # Fitting the model
 print("Training SVM...")
-svm = SVC(kernel="poly", gamma="auto")  # TODO: tweak params
+svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
 svm.fit(X_train, y_train)
 print("Training complete.\n")
 
@@ -48,7 +49,7 @@ print("Training complete.\n")
 linear: 0.7254534083802376
 rbf: 0.5872420262664165
 poly: 0.5872420262664165
-sigmoid: 
+sigmoid: 0.5872420262664165
 precomputed: N/A, not supported
 """
 
@@ -57,13 +58,15 @@ rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(0, 1)
 print(f"Random/Baseline Accuracy: {rand_acc}")
 print(f"Testing Accuracy: {sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))}")
 
-""" CV PARAM TESTING (kernel="linear")
-word, ngram_range(1,2):  
-word, ngram_range(1,3): 0.7254534083802376
-word, ngram_range(1,5):  
-word, ngram_range(1,10): 
-char, ngram_range(1,2):  
-char, ngram_range(1,3):  
-char, ngram_range(1,5):  
-char, ngram_range(1,10): 
+""" CountVectorizer PARAM TESTING (kernel="linear")
+word, ngram_range(1,2):  0.7229518449030644
+word, ngram_range(1,3):  0.7254534083802376
+word, ngram_range(1,5):  0.7329580988117573
+word, ngram_range(1,10): 0.7467166979362101
+word, ngram_range(1,20): 0.7367104440275172
+char, ngram_range(1,2):  0.6278924327704816
+char, ngram_range(1,3):  0.6766729205753595
+char, ngram_range(1,5):  0.717948717948718 # Wow!
+char, ngram_range(1,10): 0.7304565353345841
+char, ngram_range(1,20): 0.734208880550344
 """
