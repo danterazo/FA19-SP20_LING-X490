@@ -9,8 +9,9 @@ import random
 
 
 # Import data; TODO: remove httP://t.co/* links
+# original Kaggle dataset: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification
 def get_data():
-    # split feature = "test" or "train"
+    # TODO: split feature = "test" or "train"
     data_dir = "./data"
 
 
