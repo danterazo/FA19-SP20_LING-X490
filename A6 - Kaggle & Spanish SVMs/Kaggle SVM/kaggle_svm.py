@@ -61,8 +61,8 @@ for i in ngram_upper_bound:
     acc_score = sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))
 
     print(f"\nResults for ({analyzer}, ngram_range(1,{i}):")
-    print(f"Baseline Accuracy: {rand_acc:}")  # random
-    print(f"Testing Accuracy:  {acc_score:}")
+    print(f"Baseline Accuracy: {rand_acc}")  # random
+    print(f"Testing Accuracy:  {acc_score}")
 
 """ RESULTS & DOCUMENTATION
 # KERNEL TESTING (gamma="auto", analyzer=word, ngram_range(1,3))
