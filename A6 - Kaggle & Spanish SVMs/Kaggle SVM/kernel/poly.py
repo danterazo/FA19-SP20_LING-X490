@@ -20,7 +20,7 @@ def get_data():
     X_test = test.iloc[:, 1]
     X_dev = dev.iloc[:, 1]  # what to do with this? validate?
 
-    y = 4  # assumes that 'logged_in' is the class feature
+    y = 3  # assumes that 'logged_in' is the class feature
     y_train = train.iloc[:, y] * 1
     y_test = test.iloc[:, y] * 1
     y_dev = dev.iloc[:, y] * 1

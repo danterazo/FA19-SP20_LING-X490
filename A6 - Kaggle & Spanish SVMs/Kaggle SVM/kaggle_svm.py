@@ -14,7 +14,7 @@ def get_data():
     # TODO: remove NEWLINE_TOKEN; .replace("NEWLINE_TOKEN", "")
     data_dir = "./data"
 
-    data = pd.read_csv(f"{data_dir}/toxicity_annotated_comments.tsv", sep='\t')
+    data = pd.read_csv(f"{data_dir}/toxicity_annotated_comments.tsv", sep='\t', header=0)
     train = data.loc[data['split'] == "train"]
     test = data.loc[data['split'] == "test"]
     dev = data.loc[data['split'] == "dev"]
@@ -23,7 +23,7 @@ def get_data():
     X_test = test.iloc[:, 1]
     X_dev = dev.iloc[:, 1]  # what to do with this? validate?
 
-    y = 4  # assumes that 'logged_in' is the class feature
+    y = 3  # assumes that 'logged_in' is the class feature
     y_train = train.iloc[:, y] * 1
     y_test = test.iloc[:, y] * 1
     y_dev = dev.iloc[:, y] * 1
