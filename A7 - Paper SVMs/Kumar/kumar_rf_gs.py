@@ -78,7 +78,7 @@ for i in ngram_upper_bound:
     print(f"\nResults for ({analyzer}, ngram_range(1,{i}):")
     print(f"Baseline Accuracy: {rand_acc}")  # random
     print(f"Testing Accuracy:  {acc_score}")
-    # print(f"Classification Report:\n {report}")
+    # print(f"Classification Report:\n {report}") # uncomment for F1, recall, etc.
 
 """ RESULTS & DOCUMENTATION
 # TUNING 
