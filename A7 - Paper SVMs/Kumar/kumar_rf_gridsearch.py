@@ -73,8 +73,8 @@ for i in ngram_upper_bound:
 
     # Testing + results
     rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(0, 1) for x in range(0, len(y_test))])
-    acc_score = sklearn.metrics.accuracy_score(y_test, gs.predict(X_test))
-    report = classification_report(y_test, gs.predict(X_test), digits=6)
+    acc_score = sklearn.metrics.accuracy_score(y_test, rf_gs.predict(X_test))
+    report = classification_report(y_test, rf_gs.predict(X_test), digits=6)
 
     print(f"\nResults for ({analyzer}, ngram_range(1,{i}):")
     print(f"Baseline Accuracy: {rand_acc}")  # random
