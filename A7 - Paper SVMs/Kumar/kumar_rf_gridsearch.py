@@ -59,17 +59,16 @@ for i in ngram_upper_bound:
     X_train, y_train = shuffle(X_train, y_train)
     X_test, y_test = shuffle(X_test, y_test)
 
-    # GridSearch tuning
+    # RF parameter tuning w/ GridSearch
     rf_model = rf(n_jobs=1)
-    params = {'n_estimators': [10, 20, 50, 100, 500, 1000, 10000],
-              'criterion': ['gini', 'entropy']}
-
-    gs = GridSearchCV(rf_model, params, n_jobs=4, cv=5)
+    rf_params = {'n_estimators': [1, 2, 4, 8, 16, 32, 64, 100, 200],
+                 'criterion': ['gini', 'entropy']}
+    rf_gs = GridSearchCV(rf_model, rf_params, n_jobs=4, cv=5)
 
     # Fitting the model
     print("Training RF/GS...") if verbose else None
     # rf = rf(n_estimators=int(n_estimators), criterion=criterion)
-    gs.fit(X_train, y_train)
+    rf_gs.fit(X_train, y_train)
     print("Training complete.") if verbose else None
 
     # Testing + results
