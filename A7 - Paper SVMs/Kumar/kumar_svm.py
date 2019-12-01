@@ -41,8 +41,9 @@ def get_data():
 # Feature engineering: vectorizer
 # ML models need features, not just whole tweets
 print("COUNTVECTORIZER CONFIG\n----------------------")
-analyzer = input("Please enter analyzer: ")
-ngram_upper_bound = input("Please enter ngram upper bound(s): ").split()
+analyzer = input("Please enter CV analyzer: ")  # CV param
+ngram_upper_bound = input("Please enter CV ngram upper bound(s): ").split()  # CV param
+kernel = input("Please enter SVM kernel: ")  # SVM param
 
 for i in ngram_upper_bound:
     X_train, X_test, y_train, y_test = get_data()
@@ -59,7 +60,7 @@ for i in ngram_upper_bound:
 
     # Fitting the model
     print("Training SVM...") if verbose else None
-    svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
+    svm = SVC(kernel=kernel, gamma="auto")  # tweak params
     svm.fit(X_train, y_train)
     print("Training complete.") if verbose else None
 
@@ -71,20 +72,20 @@ for i in ngram_upper_bound:
     print(f"Baseline Accuracy: {rand_acc}")  # random
     print(f"Testing Accuracy:  {acc_score}")
 
-""" RESULTS & DOCUMENTATION ; TODO
-# KERNEL TESTING (gamma="auto", analyzer=word, ngram_range(1,3))
-linear: 
-rbf:     
-poly:    
-sigmoid: 
+""" RESULTS & DOCUMENTATION
+# KERNEL TESTING (gamma="auto"; analyzer=word, ngram_range(1,3))
+linear:  0.6987878787878787
+rbf:     0.5812121212121212
+poly:    0.5892929292929293
+sigmoid: 0.5793939393939394
 precomputed: N/A, not supported
 
 # CountVectorizer PARAM TESTING (kernel="linear") ; TODO
-word, ngram_range(1,2):  
-word, ngram_range(1,3): 
-word, ngram_range(1,5): 
-word, ngram_range(1,10): 
-word, ngram_range(1,20): 
+word, ngram_range(1,2):  0.703030303030303
+word, ngram_range(1,3):  0.701010101010101 # independent from linear kernel test
+word, ngram_range(1,5):  0.6890909090909091
+word, ngram_range(1,10): 0.6826262626262626
+word, ngram_range(1,20): 0.6890909090909091
 char, ngram_range(1,2):  
 char, ngram_range(1,3):  
 char, ngram_range(1,5):  
