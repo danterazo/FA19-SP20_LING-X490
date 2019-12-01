@@ -43,7 +43,8 @@ def get_data():
 print("COUNTVECTORIZER CONFIG\n----------------------")
 analyzer = input("Please enter CV analyzer: ")  # CV param
 ngram_upper_bound = input("Please enter CV ngram upper bound(s): ").split()  # CV param
-n_estimators = input("Please enter # of RF estimators: ")  # RF param
+n_estimators = input("\nPlease enter # of RF estimators: ")  # RF param
+criterion = input("Please enter RF criterion: ")  # RF param; gini OR entropy
 max_depth = input("Please enter RF max depth: ")  # RF param
 
 for i in ngram_upper_bound:
@@ -61,7 +62,8 @@ for i in ngram_upper_bound:
 
     # Fitting the model
     print("Training RF...") if verbose else None
-    rf = RandomForestClassifier(n_estimators=int(n_estimators), max_depth=int(max_depth))  # tweak params
+    rf = RandomForestClassifier(n_estimators=int(n_estimators), criterion=criterion,
+                                max_depth=int(max_depth))
     rf.fit(X_train, y_train)
     print("Training complete.") if verbose else None
 
@@ -89,15 +91,15 @@ for i in ngram_upper_bound:
 20: 
 100: 
 
-# CountVectorizer PARAM TESTING (n_estimators=100, max_depth=2) ; TODO
+# CountVectorizer PARAM TESTING (n_estimators=100, criterion="gini", max_depth=2) ; TODO
 word, ngram_range(1,2):  0.5773737373737374
 word, ngram_range(1,3):  0.5779797979797979
 word, ngram_range(1,5):  0.5812121212121212
-word, ngram_range(1,10): 0.576969696969697
+word, ngram_range(1,10): 0.5769696969696970
 word, ngram_range(1,20): 0.5808080808080808
-char, ngram_range(1,2):  
-char, ngram_range(1,3):  
-char, ngram_range(1,5):  
-char, ngram_range(1,10): 
-char, ngram_range(1,20): 
+char, ngram_range(1,2):  0.5822222222222222
+char, ngram_range(1,3):  0.5785858585858585
+char, ngram_range(1,5):  0.5840404040404040
+char, ngram_range(1,10): 0.5880808080808081
+char, ngram_range(1,20): 0.5731313131313132
 """
