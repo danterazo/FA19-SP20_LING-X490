@@ -67,7 +67,6 @@ for i in ngram_upper_bound:
 
     # Fitting the model
     print("Training RF/GS....") if verbose else None
-    # rf = rf(n_estimators=int(n_estimators), criterion=criterion)
     rf_gs.fit(X_train, y_train)
     print("Training complete.") if verbose else None
 
@@ -79,7 +78,7 @@ for i in ngram_upper_bound:
     print(f"\nResults for ({analyzer}, ngram_range(1,{i}):")
     print(f"Baseline Accuracy: {rand_acc}")  # random
     print(f"Testing Accuracy:  {acc_score}")
-    print(f"Classification Report:\n {report}")
+    # print(f"Classification Report:\n {report}")
 
 """ RESULTS & DOCUMENTATION
 # TUNING 
