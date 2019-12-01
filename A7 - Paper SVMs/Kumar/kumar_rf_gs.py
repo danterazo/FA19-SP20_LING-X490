@@ -84,13 +84,13 @@ for i in ngram_upper_bound:
 # TUNING 
 
 # CountVectorizer PARAM TESTING (GS) ; TODO
-word, ngram_range(1,2):  
+word, ngram_range(1,2):  0.7155555555555555
 word, ngram_range(1,3):  
 word, ngram_range(1,5):  
 word, ngram_range(1,10): 
 word, ngram_range(1,20): 
-char, ngram_range(1,2):  
-char, ngram_range(1,3):  
+char, ngram_range(1,2):  0.6880808080808081
+char, ngram_range(1,3):  0.7058585858585859
 char, ngram_range(1,5):  
 char, ngram_range(1,10): 
 char, ngram_range(1,20): 
