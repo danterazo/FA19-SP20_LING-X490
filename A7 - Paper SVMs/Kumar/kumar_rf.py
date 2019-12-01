@@ -74,16 +74,9 @@ for i in ngram_upper_bound:
     print(f"Testing Accuracy:  {acc_score}")
 
 """ RESULTS & DOCUMENTATION
-# N_Estimators TESTING (criterion="gini"; analyzer=word, ngram_range(1,3)) ; TODO
-10:  
-100:     
-1000:    
-10000: 
-100000: 
-
 # Criterion TESTING (n_estimators=100; analyzer=word, ngram_range(1,3)) ; TODO
-Gini: 
-Entropy: 
+Gini:    0.6876767676767677
+Entropy: 0.7101010101010101
 
 # CountVectorizer PARAM TESTING (n_estimators=100, criterion="gini", max_depth=2) ; TODO
 word, ngram_range(1,2):  0.706060606060606
