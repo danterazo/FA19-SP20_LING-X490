@@ -61,7 +61,7 @@ for i in ngram_upper_bound:
 
     # Fitting the model
     print("Training RF...") if verbose else None
-    rf = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth)  # tweak params
+    rf = RandomForestClassifier(n_estimators=int(n_estimators), max_depth=int(max_depth))  # tweak params
     rf.fit(X_train, y_train)
     print("Training complete.") if verbose else None
 
@@ -73,15 +73,15 @@ for i in ngram_upper_bound:
     print(f"Baseline Accuracy: {rand_acc}")  # random
     print(f"Testing Accuracy:  {acc_score}")
 
-""" RESULTS & DOCUMENTATION ; TODO
-# N_ESTIMATORS TESTING (max_depth=2; analyzer=word, ngram_range(1,3))
+""" RESULTS & DOCUMENTATION
+# N_Estimators TESTING (max_depth=2; analyzer=word, ngram_range(1,3)) ; TODO
 10:  
 100:     
 1000:    
 10000: 
 100000: 
 
-# MAX_DEPTH TESTING (n_estimators=100; analyzer=word, ngram_range(1,3))
+# Max_Depth TESTING (n_estimators=100; analyzer=word, ngram_range(1,3)) ; TODO
 2: 
 3: 
 5: 
@@ -89,12 +89,12 @@ for i in ngram_upper_bound:
 20: 
 100: 
 
-# CountVectorizer PARAM TESTING (kernel="linear") ; TODO
-word, ngram_range(1,2): 
-word, ngram_range(1,3): 
-word, ngram_range(1,5): 
-word, ngram_range(1,10): 
-word, ngram_range(1,20): 
+# CountVectorizer PARAM TESTING (n_estimators=100, max_depth=2) ; TODO
+word, ngram_range(1,2):  0.5773737373737374
+word, ngram_range(1,3):  0.5779797979797979
+word, ngram_range(1,5):  0.5812121212121212
+word, ngram_range(1,10): 0.576969696969697
+word, ngram_range(1,20): 0.5808080808080808
 char, ngram_range(1,2):  
 char, ngram_range(1,3):  
 char, ngram_range(1,5):  
