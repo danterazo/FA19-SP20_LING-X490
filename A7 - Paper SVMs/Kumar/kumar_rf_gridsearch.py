@@ -51,7 +51,7 @@ for i in ngram_upper_bound:
     verbose = True  # print statement flag
 
     vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
-    print("\nFitting CV...") if verbose else None
+    print("\nFitting CV......") if verbose else None
     X_train = vec.fit_transform(X_train)
     X_test = vec.transform(X_test)
 
@@ -66,7 +66,7 @@ for i in ngram_upper_bound:
     rf_gs = GridSearchCV(rf_model, rf_params, n_jobs=4, cv=5)
 
     # Fitting the model
-    print("Training RF/GS...") if verbose else None
+    print("Training RF/GS....") if verbose else None
     # rf = rf(n_estimators=int(n_estimators), criterion=criterion)
     rf_gs.fit(X_train, y_train)
     print("Training complete.") if verbose else None
