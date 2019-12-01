@@ -5,6 +5,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.utils import shuffle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 import sklearn.metrics
 import pandas as pd
 import random
@@ -58,7 +59,7 @@ for i in ngram_upper_bound:
     X_train, y_train = shuffle(X_train, y_train)
     X_test, y_test = shuffle(X_test, y_test)
 
-    # GridSearch params
+    # GridSearch tuning
     rf_model = rf(n_jobs=1)
     params = {'n_estimators': [10, 20, 50, 100, 500, 1000, 10000],
               'criterion': ['gini', 'entropy']}
@@ -74,24 +75,17 @@ for i in ngram_upper_bound:
     # Testing + results
     rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(0, 1) for x in range(0, len(y_test))])
     acc_score = sklearn.metrics.accuracy_score(y_test, gs.predict(X_test))
+    report = classification_report(y_test, gs.predict(X_test), digits=6)
 
     print(f"\nResults for ({analyzer}, ngram_range(1,{i}):")
     print(f"Baseline Accuracy: {rand_acc}")  # random
     print(f"Testing Accuracy:  {acc_score}")
+    print(f"Classification Report:\n {report}")
 
 """ RESULTS & DOCUMENTATION
-# N_Estimators TESTING (criterion="gini"; analyzer=word, ngram_range(1,3)) ; TODO
-10:  
-100:     
-1000:    
-10000: 
-100000: 
+# TUNING 
 
-# Criterion TESTING (n_estimators=100; analyzer=word, ngram_range(1,3)) ; TODO
-Gini: 
-Entropy: 
-
-# CountVectorizer PARAM TESTING (n_estimators=100, criterion="gini", max_depth=2) ; TODO
+# CountVectorizer PARAM TESTING (GS) ; TODO
 word, ngram_range(1,2):  
 word, ngram_range(1,3):  
 word, ngram_range(1,5):  
