@@ -5,7 +5,6 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.utils import shuffle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
 import sklearn.metrics
 import pandas as pd
 import random
@@ -73,12 +72,10 @@ for i in ngram_upper_bound:
     # Testing + results
     rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(0, 1) for x in range(0, len(y_test))])
     acc_score = sklearn.metrics.accuracy_score(y_test, rf_gs.predict(X_test))
-    # report = classification_report(y_test, rf_gs.predict(X_test), digits=6)
 
     print(f"\nResults for ({analyzer}, ngram_range(1,{i}):")
     print(f"Baseline Accuracy: {rand_acc}")  # random
     print(f"Testing Accuracy:  {acc_score}")
-    # print(f"Classification Report:\n {report}") # uncomment for F1, recall, etc.
 
 """ RESULTS & DOCUMENTATION
 # TUNING 
