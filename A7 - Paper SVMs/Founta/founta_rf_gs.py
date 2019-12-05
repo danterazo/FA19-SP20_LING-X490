@@ -40,8 +40,8 @@ for i in ngram_upper_bound:
 
     vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
     print("\nFitting CV........") if verbose else None
-    X_train = vec.fit_transform(X_train)
-    X_test = vec.transform(X_test)
+    X_train = vec.fit_transform(X_train.values.astype('U'))
+    X_test = vec.transform(X_test.values.astype('U'))
 
     # Shuffle data (keeps indices)
     X_train, y_train = shuffle(X_train, y_train)
