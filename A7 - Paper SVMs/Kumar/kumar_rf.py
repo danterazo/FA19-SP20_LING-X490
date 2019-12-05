@@ -86,7 +86,7 @@ word, ngram_range(1,10): 0.675959595959596
 word, ngram_range(1,20): 0.6745454545454546
 char, ngram_range(1,2):  0.6795959595959596
 char, ngram_range(1,3):  0.6933333333333334
-char, ngram_range(1,5):  0.7107070707070707
+char, ngram_range(1,5):  0.7107070707070707 *
 char, ngram_range(1,10): 0.6937373737373738
 char, ngram_range(1,20): 0.6890909090909091
 """

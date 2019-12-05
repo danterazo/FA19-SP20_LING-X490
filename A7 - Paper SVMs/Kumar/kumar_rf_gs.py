@@ -89,6 +89,6 @@ word, ngram_range(1,20): 0.6866666666666666
 char, ngram_range(1,2):  0.6880808080808081
 char, ngram_range(1,3):  0.7058585858585859
 char, ngram_range(1,5):  0.7141414141414142
-char, ngram_range(1,10): 0.7262626262626263
+char, ngram_range(1,10): 0.7262626262626263 *
 char, ngram_range(1,20): 0.7024242424242424
 """
