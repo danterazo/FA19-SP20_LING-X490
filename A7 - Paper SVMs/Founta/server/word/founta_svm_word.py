@@ -30,9 +30,9 @@ def get_data():
 # Feature engineering: vectorizer
 # ML models need features, not just whole tweets
 print("COUNTVECTORIZER CONFIG\n----------------------")
-analyzer = "word"
-ngram_upper_bound = [2, 3, 5, 10, 20]
-kernel = "linear"
+analyzer = "word"  # hardcoded for server
+ngram_upper_bound = [2, 3, 5, 10, 20]  # hardcoded for server
+kernel = "linear"  # hardcoded for server
 
 for i in ngram_upper_bound:
     X_train, X_test, y_train, y_test = get_data()
