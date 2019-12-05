@@ -80,7 +80,7 @@ poly:    0.5892929292929293
 sigmoid: 0.5793939393939394
 precomputed: N/A, not supported
 
-# CountVectorizer PARAM TESTING (kernel="linear") ; TODO
+# CountVectorizer PARAM TESTING (kernel="linear")
 word, ngram_range(1,2):  0.7030303030303030 *
 word, ngram_range(1,3):  0.7010101010101010 # independent from linear kernel test
 word, ngram_range(1,5):  0.6890909090909091

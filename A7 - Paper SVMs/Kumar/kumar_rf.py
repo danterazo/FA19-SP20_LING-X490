@@ -74,11 +74,11 @@ for i in ngram_upper_bound:
     print(f"Testing Accuracy:  {acc_score}")
 
 """ RESULTS & DOCUMENTATION
-# Criterion TESTING (n_estimators=100; analyzer=word, ngram_range(1,3)) ; TODO
+# Criterion TESTING (n_estimators=100; analyzer=word, ngram_range(1,3))
 Gini:    0.6876767676767677
 Entropy: 0.7101010101010101
 
-# CountVectorizer PARAM TESTING (n_estimators=100, criterion="gini", max_depth=2) ; TODO
+# CountVectorizer PARAM TESTING (n_estimators=100, criterion="gini", max_depth=2)
 word, ngram_range(1,2):  0.706060606060606
 word, ngram_range(1,3):  0.6862626262626262
 word, ngram_range(1,5):  0.6872727272727273
