@@ -63,7 +63,7 @@ for i in ngram_upper_bound:
 
 """ RESULTS & DOCUMENTATION
 # KERNEL TESTING (gamma="auto", analyzer=word, ngram_range(1,3))
-linear:  
+linear: 0.9428372739916551
 rbf:     
 poly:    
 sigmoid: 
