@@ -12,7 +12,7 @@ import random
 
 # Import data; TODO: remove httP://t.co/* links
 def get_data():
-    data_dir = "./data"
+    data_dir = "../../data"
 
     hate = pd.read_csv(f"{data_dir}/hate.txt", sep='\n', names=["text"], engine='c')
     noHate = pd.read_csv(f"{data_dir}/noHate.txt", lineterminator='\n', names=["text"], engine='c')
