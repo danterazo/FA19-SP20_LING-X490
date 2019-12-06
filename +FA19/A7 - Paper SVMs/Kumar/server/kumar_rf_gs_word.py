@@ -19,7 +19,7 @@ def get_data():
     - Not Hate:
         - Non-aggressive (NAG)
     """
-    data_dir = ".././data"
+    data_dir = "../data"
 
     # combine data
     cag = pd.read_csv(f"{data_dir}/cag.txt", sep='\n', names=["text"])

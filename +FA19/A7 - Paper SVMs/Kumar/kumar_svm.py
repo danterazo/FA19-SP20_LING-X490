@@ -1,4 +1,4 @@
-# LING-X 490 Assignment 7: Founta SVM
+# LING-X 490 Assignment 7: Kumar SVM
 # Dante Razo, drazo, 11/21/2019
 from sklearn.svm import SVC
 from sklearn.utils import shuffle
@@ -9,20 +9,31 @@ import pandas as pd
 import random
 
 
-# Import data; TODO: remove httP://t.co/* links
 def get_data():
-    data_dir = "./data"
+    """ KUMAR Dataset Documentation
+    - Hate:
+        - Overtly Aggressive (OAG)
+        - Covertly Aggressive (CAG)
+    - Not Hate:
+        - Non-aggressive (NAG)
+    """
+    data_dir = "data"
 
-    hate = pd.read_csv(f"{data_dir}/hate.txt", sep='\n', names=["text"], engine='c')
-    noHate = pd.read_csv(f"{data_dir}/noHate.txt", lineterminator='\n', names=["text"], engine='c')
-    hate["class"] = 1  # abusive
-    noHate["class"] = 0  # not abusive
+    # combine data
+    cag = pd.read_csv(f"{data_dir}/cag.txt", sep='\n', names=["text"])
+    oag = pd.read_csv(f"{data_dir}/oag.txt", sep='\n', names=["text"])
+    nag = pd.read_csv(f"{data_dir}/nag.txt", sep='\n', names=["text"])
+    cag["class"] = 1  # 1: abusive (Kumar parlance: "aggresive")
+    oag["class"] = 1
+    nag["class"] = 0  # 0: not abusive
 
-    data = hate.append(noHate, ignore_index=False)
+    # combine then split into X and y
+    data = cag.append(oag, ignore_index=True).append(nag, ignore_index=True)
     X = data.iloc[:, 0]
     y = data["class"]
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+    # split into train, test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 
     return X_train, X_test, y_train, y_test
 
@@ -40,8 +51,8 @@ for i in ngram_upper_bound:
 
     vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
     print("\nFitting CV...") if verbose else None
-    X_train = vec.fit_transform(X_train.values.astype('U'))
-    X_test = vec.transform(X_test.values.astype('U'))
+    X_train = vec.fit_transform(X_train)
+    X_test = vec.transform(X_test)
 
     # Shuffle data (keeps indices)
     X_train, y_train = shuffle(X_train, y_train)
@@ -62,22 +73,22 @@ for i in ngram_upper_bound:
     print(f"Testing Accuracy:  {acc_score}")
 
 """ RESULTS & DOCUMENTATION
-# KERNEL TESTING (gamma="auto", analyzer=word, ngram_range(1,3))
-linear:  0.9428372739916551
-rbf:     0.8529207232267038
-poly:    0.8529207232267038
-sigmoid: 0.8529207232267038
+# KERNEL TESTING (gamma="auto"; analyzer=word, ngram_range(1,3))
+linear:  0.6987878787878787
+rbf:     0.5812121212121212
+poly:    0.5892929292929293
+sigmoid: 0.5793939393939394
 precomputed: N/A, not supported
 
 # CountVectorizer PARAM TESTING (kernel="linear")
-word, ngram_range(1,2):  0.9438803894297636
-word, ngram_range(1,3):  0.9428372739916551
-word, ngram_range(1,5):  0.9420723226703756
-word, ngram_range(1,10): 0.9394993045897079
-word, ngram_range(1,20): 0.9382475660639777
-char, ngram_range(1,2):  
-char, ngram_range(1,3):  
-char, ngram_range(1,5):  
-char, ngram_range(1,10): 
-char, ngram_range(1,20): 
+word, ngram_range(1,2):  0.7030303030303030 *
+word, ngram_range(1,3):  0.7010101010101010 # independent from linear kernel test
+word, ngram_range(1,5):  0.6890909090909091
+word, ngram_range(1,10): 0.6826262626262626
+word, ngram_range(1,20): 0.6890909090909091
+char, ngram_range(1,2):  0.6709090909090909
+char, ngram_range(1,3):  0.6652525252525252
+char, ngram_range(1,5):  0.6761616161616162
+char, ngram_range(1,10): 0.6919191919191919
+char, ngram_range(1,20): 0.6636363636363637
 """

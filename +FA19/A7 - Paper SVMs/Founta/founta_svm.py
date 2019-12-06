@@ -1,6 +1,6 @@
-# LING-X 490 Assignment 7: Founta Random Forest
+# LING-X 490 Assignment 7: Founta SVM
 # Dante Razo, drazo, 11/21/2019
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.utils import shuffle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
@@ -11,7 +11,7 @@ import random
 
 # Import data; TODO: remove httP://t.co/* links
 def get_data():
-    data_dir = "./data"
+    data_dir = "data"
 
     hate = pd.read_csv(f"{data_dir}/hate.txt", sep='\n', names=["text"], engine='c')
     noHate = pd.read_csv(f"{data_dir}/noHate.txt", lineterminator='\n', names=["text"], engine='c')
@@ -29,11 +29,10 @@ def get_data():
 
 # Feature engineering: vectorizer
 # ML models need features, not just whole tweets
-print("PARAM CONFIG\n------------")
-analyzer = input("CV: Please enter analyzer: ")  # CV param
-ngram_upper_bound = input("CV: Please enter ngram upper bound(s): ").split()  # CV param
-n_estimators = input("RF: Please enter # of estimators: ")  # RF param
-criterion = input("RF: Please enter criterion: ")  # RF param; gini OR entropy
+print("COUNTVECTORIZER CONFIG\n----------------------")
+analyzer = input("Please enter CV analyzer: ")  # CV param
+ngram_upper_bound = input("Please enter CV ngram upper bound(s): ").split()  # CV param
+kernel = input("Please enter SVM kernel: ")  # SVM param
 
 for i in ngram_upper_bound:
     X_train, X_test, y_train, y_test = get_data()
@@ -49,30 +48,33 @@ for i in ngram_upper_bound:
     X_test, y_test = shuffle(X_test, y_test)
 
     # Fitting the model
-    print("Training RF...") if verbose else None
-    rf = RandomForestClassifier(n_estimators=int(n_estimators), criterion=criterion)
-    rf.fit(X_train, y_train)
+    print("Training SVM...") if verbose else None
+    svm = SVC(kernel=kernel, gamma="auto")  # tweak params
+    svm.fit(X_train, y_train)
     print("Training complete.") if verbose else None
 
     # Testing + results
     rand_acc = sklearn.metrics.balanced_accuracy_score(y_test, [random.randint(0, 1) for x in range(0, len(y_test))])
-    acc_score = sklearn.metrics.accuracy_score(y_test, rf.predict(X_test))
+    acc_score = sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))
 
     print(f"\nResults for ({analyzer}, ngram_range(1,{i}):")
     print(f"Baseline Accuracy: {rand_acc}")  # random
     print(f"Testing Accuracy:  {acc_score}")
 
 """ RESULTS & DOCUMENTATION
-# Criterion TESTING (n_estimators=100; analyzer=word, ngram_range(1,3)) ; TODO
-Gini:    
-Entropy: 
+# KERNEL TESTING (gamma="auto", analyzer=word, ngram_range(1,3))
+linear:  0.9428372739916551
+rbf:     0.8529207232267038
+poly:    0.8529207232267038
+sigmoid: 0.8529207232267038
+precomputed: N/A, not supported
 
-# CountVectorizer PARAM TESTING (n_estimators=100, criterion="gini", max_depth=2) ; TODO
-word, ngram_range(1,2):  0.9291376912378303
-word, ngram_range(1,3):  0.9207927677329625
-word, ngram_range(1,5):  0.9114742698191933
-word, ngram_range(1,10): 0.9047983310152990
-word, ngram_range(1,20): 0.9009040333796940
+# CountVectorizer PARAM TESTING (kernel="linear")
+word, ngram_range(1,2):  0.9438803894297636
+word, ngram_range(1,3):  0.9428372739916551
+word, ngram_range(1,5):  0.9420723226703756
+word, ngram_range(1,10): 0.9394993045897079
+word, ngram_range(1,20): 0.9382475660639777
 char, ngram_range(1,2):  
 char, ngram_range(1,3):  
 char, ngram_range(1,5):  

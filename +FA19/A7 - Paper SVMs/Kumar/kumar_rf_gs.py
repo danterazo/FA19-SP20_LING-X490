@@ -10,20 +10,31 @@ import pandas as pd
 import random
 
 
-# Import data; TODO: remove httP://t.co/* links
 def get_data():
-    data_dir = "./data"
+    """ KUMAR Dataset Documentation
+    - Hate:
+        - Overtly Aggressive (OAG)
+        - Covertly Aggressive (CAG)
+    - Not Hate:
+        - Non-aggressive (NAG)
+    """
+    data_dir = "data"
 
-    hate = pd.read_csv(f"{data_dir}/hate.txt", sep='\n', names=["text"], engine='c')
-    noHate = pd.read_csv(f"{data_dir}/noHate.txt", lineterminator='\n', names=["text"], engine='c')
-    hate["class"] = 1  # abusive
-    noHate["class"] = 0  # not abusive
+    # combine data
+    cag = pd.read_csv(f"{data_dir}/cag.txt", sep='\n', names=["text"])
+    oag = pd.read_csv(f"{data_dir}/oag.txt", sep='\n', names=["text"])
+    nag = pd.read_csv(f"{data_dir}/nag.txt", sep='\n', names=["text"])
+    cag["class"] = 1  # 1: abusive (Kumar parlance: "aggresive")
+    oag["class"] = 1
+    nag["class"] = 0  # 0: not abusive
 
-    data = hate.append(noHate, ignore_index=False)
+    # combine then split into X and y
+    data = cag.append(oag, ignore_index=True).append(nag, ignore_index=True)
     X = data.iloc[:, 0]
     y = data["class"]
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+    # split into train, test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 
     return X_train, X_test, y_train, y_test
 
@@ -40,8 +51,8 @@ for i in ngram_upper_bound:
 
     vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
     print("\nFitting CV........") if verbose else None
-    X_train = vec.fit_transform(X_train.values.astype('U'))
-    X_test = vec.transform(X_test.values.astype('U'))
+    X_train = vec.fit_transform(X_train)
+    X_test = vec.transform(X_test)
 
     # Shuffle data (keeps indices)
     X_train, y_train = shuffle(X_train, y_train)
@@ -69,15 +80,15 @@ for i in ngram_upper_bound:
 """ RESULTS & DOCUMENTATION
 # TUNING 
 
-# CountVectorizer PARAM TESTING (GS) ; TODO
-word, ngram_range(1,2):  0.9296244784422809
-word, ngram_range(1,3):  0.9228789986091794
-word, ngram_range(1,5):  
-word, ngram_range(1,10): 
-word, ngram_range(1,20): 
-char, ngram_range(1,2):  0.9081363004172461
-char, ngram_range(1,3):  0.9248261474269819
-char, ngram_range(1,5):  0.9369262865090403
-char, ngram_range(1,10): 
-char, ngram_range(1,20): 
+# CountVectorizer PARAM TESTING (GS)
+word, ngram_range(1,2):  0.7155555555555555
+word, ngram_range(1,3):  0.7076767676767677
+word, ngram_range(1,5):  0.693939393939394
+word, ngram_range(1,10): 0.6953535353535354
+word, ngram_range(1,20): 0.6866666666666666
+char, ngram_range(1,2):  0.6880808080808081
+char, ngram_range(1,3):  0.7058585858585859
+char, ngram_range(1,5):  0.7141414141414142
+char, ngram_range(1,10): 0.7262626262626263 *founta
+char, ngram_range(1,20): 0.7024242424242424
 """
