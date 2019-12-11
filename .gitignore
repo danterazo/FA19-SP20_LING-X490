@@ -1,4 +1,8 @@
 .idea/
-*.ini
+
+*.aux
+*.log
+*.synctex.gz
+desktop.ini
 
 +FA19/A6 - Kaggle & Spanish SVMs/Kaggle SVM/data_post-competition/
