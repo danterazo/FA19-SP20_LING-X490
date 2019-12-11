@@ -1,0 +1,111 @@
+% Programming/Coding Assignment LaTeX Template
+% This template has been downloaded from: http://www.latextemplates.com
+% Original author: Ted Pavlic (http://www.tedpavlic.com)
+
+%-----------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%-----------------------------------------------------------------------
+\documentclass[fleqn]{article}
+
+% document packages
+% \usepackage{}
+
+\input{x490_final_preamble.tex} % preamble
+
+%-----------------------------------------------------------------------
+%	DUE DATE and TIME
+%-----------------------------------------------------------------------
+% formatting
+\newtimeformat{ampmseconds}{{\THEHOURXII}:\twodigit{\THEMINUTE}:\twodigit{\THESECOND} \amorpmname} 
+\settimeformat{ampmseconds}
+\usdate
+
+% commands for title page
+\newcommand{\dueMonth}{12}		% MONTH
+\newcommand{\dueDate}{18}		% DATE
+\newcommand{\dueYear}{2019}		% YEAR
+\newcommand{\dueTime}{11:59pm}	% TIME
+\newcommand{\hmwkNum}{} % Homework / Assignment / Problem Set #
+
+%-----------------------------------------------------------------------
+%	NAME and CLASS SECTION
+%-----------------------------------------------------------------------
+% user-defined
+\newcommand{\hmwkType}{Final Report} % Homework, Assignment, Pset, etc.
+\newcommand{\hmwkClassNum}{LING-X 490} % Course code
+\newcommand{\hmwkClassName}{Readings in Linguistics}
+\newcommand{\hmwkClassInstructor}{Dr. Sandra Kuebler} % Professor
+\newcommand{\hmwkAuthorName}{Dante Razo} % Your name
+
+% auto
+\newcommand{\hmwkClass}{\hmwkClassNum: \hmwkClassName\\} % Course/class
+\newcommand{\hmwkTitle}{\hmwkType\ \hmwkNum{}} % Assignment title
+\newcommand{\hmwkDueDate}{\dayofweekname{\dueDate}{\dueMonth}{\dueYear}, \monthname[\dueMonth] \dueDate, \dueYear \ @ \dueTime} % Due date
+
+%-----------------------------------------------------------------------
+%	TITLE PAGE
+%-----------------------------------------------------------------------
+\title{
+	\vspace{2in}
+	\textmd{\textbf{\hmwkClass\ \hmwkTitle}}\\
+	\normalsize\vspace{0.1in}Due\ on\ \hmwkDueDate\\
+	%\vspace{0.1in}
+	\large{Instructor: \hmwkClassInstructor}\\
+	%\vspace{0.1in}\large{\hmwkClassNum}
+	\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{Last Modified on\ \today \ @ \currenttime}
+
+\begin{document}
+	\maketitle
+	\abovedisplayskip=-\baselineskip % no newline before environment
+	\abovedisplayshortskip=-\baselineskip
+
+%-----------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%-----------------------------------------------------------------------
+\newpage
+%\tableofcontents
+\newpage
+
+%-----------------------------------------------------------------------
+%	Idea: Biased (Boosted) vs. Random Sampling
+%-----------------------------------------------------------------------
+% Resample on Kaggle since its huge. 
+% 1. Boost by filtering on a topic and creating a list of words/hashtags (i.e. soccer: ["goalie", "manchester"]). Compare to random sampling.
+% 3. Get abusive words list from lexicon-of-abusive-words repo
+% 	- if 1+ words appear, then it's explicit; otherwise, implicit
+
+% REMEMBER: it's okay to fail in research
+
+%-----------------------------------------------------------------------
+%	Report
+%-----------------------------------------------------------------------
+\section{Research Question}
+% TODO: rewrite it
+% Alternatively: Depending on what sampling you use, it makes the data more explicit or implicit
+
+\section{Sampling Experiment}
+
+\section{Bias Paper Overview}
+% TODO: Wiegand paper
+
+\subsection{Kaggle}
+
+\subsubsection{SVM}
+
+\subsection{Founta}
+
+\subsubsection{SVM}
+\subsubsection{Random Forest}
+\subsubsection{Random Forest with GridSearch}
+
+\subsection{Kumar}
+
+\subsubsection{SVM}
+\subsubsection{Random Forest}
+\subsubsection{Random Forest with GridSearch}
+
+\end{document}
