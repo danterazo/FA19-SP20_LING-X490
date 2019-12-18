@@ -18,7 +18,7 @@ def get_data(verbose, sample_types, sample_size=10000):
     to_return = []
 
     # sampled datasets
-    if sample_size > 66838:
+    if sample_size > 66838 or sample_size < 1:
         sample_size = 66838  # bound; number of entries in dataset with abusive language matches
 
     print(f"Boosting data...") if verbose else None
