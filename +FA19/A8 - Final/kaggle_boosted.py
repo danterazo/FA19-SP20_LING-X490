@@ -78,7 +78,7 @@ for i in ngram_upper_bound:
         verbose = True  # print statement flag
 
         vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
-        print(f"\nFitting {sample_types[t]}-Sample CV...") if verbose else None
+        print(f"\nFitting {sample_types[t]}-sample CV...") if verbose else None
         X_train = vec.fit_transform(X_train)
         X_test = vec.transform(X_test)
 
@@ -87,7 +87,7 @@ for i in ngram_upper_bound:
         X_test, y_test = shuffle(X_test, y_test)
 
         # Fitting the model
-        print(f"Training {sample_types[t]}-Sample SVM...") if verbose else None
+        print(f"Training {sample_types[t]}-sample SVM...") if verbose else None
         svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
         svm.fit(X_train, y_train)
         print(f"Training complete.") if verbose else None
@@ -97,7 +97,7 @@ for i in ngram_upper_bound:
                                                            [random.randint(0, 1) for x in range(0, len(y_test))])
         acc_score = sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))
 
-        print(f"\nResults for {sample_types[t]}-Sample ({analyzer}, ngram_range(1,{i}):")
+        print(f"\nResults for {sample_types[t]}-sample ({analyzer}, ngram_range(1,{i}):")
         print(f"Baseline Accuracy: {rand_acc}")  # random
         print(f"Testing Accuracy:  {acc_score}")
 
