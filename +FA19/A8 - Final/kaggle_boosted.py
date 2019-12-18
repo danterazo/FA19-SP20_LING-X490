@@ -10,17 +10,24 @@ import random
 
 # Import data; TO CONSIDER: remove http://t.co/* links, NEWLINE_TOKEN
 # original Kaggle dataset: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification
-def get_data():
+def get_data(verbose, sample_size=10000):
     data_dir = "./data"
     data = pd.read_csv(f"{data_dir}/toxicity_annotated_comments.tsv", sep='\t', header=0)
-    data.shuffle()
+    data.sample(frac=1)  # shuffle data
 
     sample_type = ["boosted", "random"]
     to_return = []
 
     # sampled datasets
-    boosted_data = boost_data(data)
-    random_sample = data.sample(len(boosted_data))  # ensures that both sets are the same size
+    if sample_size > 66838:
+        sample_size = 66838  # bound; number of entries in dataset with abusive language matches
+
+    print(f"Boosting data...") if verbose else None
+    boosted_data = boost_data(data).sample(frac=1)[0:sample_size]  # < 66838
+    print(f"Boosting complete.") if verbose else None
+    random_sample = data.sample(sample_size)  # ensures that both sets are the same size
+
+    print(f"len: {len(boosted_data)}")
 
     for s in sample_type:
         if s is "boosted":
@@ -77,8 +84,8 @@ sample_types = ["Boosted", "Random"]
 
 for i in ngram_upper_bound:
     for t in range(0, len(sample_types)):
-        X_train, X_test, X_dev, y_train, y_test, y_dev = get_data()[t]
         verbose = True  # print statement flag
+        X_train, X_test, X_dev, y_train, y_test, y_dev = get_data(verbose)[t]
 
         vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
         print(f"\nFitting {sample_types[t]}-sample CV...") if verbose else None
