@@ -10,12 +10,11 @@ import random
 
 # Import data; TO CONSIDER: remove http://t.co/* links, NEWLINE_TOKEN
 # original Kaggle dataset: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification
-def get_data(verbose, sample_size=10000):
+def get_data(verbose, sample_types, sample_size=10000):
     data_dir = "./data"
     data = pd.read_csv(f"{data_dir}/toxicity_annotated_comments.tsv", sep='\t', header=0)
     data.sample(frac=1)  # shuffle data
 
-    sample_type = ["boosted", "random"]
     to_return = []
 
     # sampled datasets
@@ -29,10 +28,10 @@ def get_data(verbose, sample_size=10000):
 
     print(f"len: {len(boosted_data)}")
 
-    for s in sample_type:
-        if s is "boosted":
+    for s in sample_types:
+        if s is "Boosted":
             data = boosted_data
-        elif s is "random":
+        elif s is "Random":
             data = random_sample
 
         train = data.loc[data['split'] == "train"]
@@ -76,16 +75,21 @@ def boost_data(data):
 
 # Feature engineering: vectorizer
 # ML models need features, not just whole tweets
-print("COUNTVECTORIZER CONFIG\n----------------------")
-# analyzer = input("Please enter analyzer: ")
-# ngram_upper_bound = input("Please enter ngram upper bound(s): ").split()
-analyzer, ngram_upper_bound = ["word", [3]]  # debugging
+development = True  # flag; ask for input if False
+if development:
+    analyzer, ngram_upper_bound, sample_size = ["word", [3], 1000]  # default values for quick fits
+else:
+    print("COUNTVECTORIZER CONFIG\n----------------------")
+    analyzer = input("Please enter analyzer: ")
+    ngram_upper_bound = input("Please enter ngram upper bound(s): ").split()
+    sample_size = input("Please enter sample size (< 66839): ")
+
 sample_types = ["Boosted", "Random"]
 
 for i in ngram_upper_bound:
     for t in range(0, len(sample_types)):
         verbose = True  # print statement flag
-        X_train, X_test, X_dev, y_train, y_test, y_dev = get_data(verbose)[t]
+        X_train, X_test, X_dev, y_train, y_test, y_dev = get_data(verbose, sample_types, sample_size)[t]
 
         vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
         print(f"\nFitting {sample_types[t]}-sample CV...") if verbose else None
