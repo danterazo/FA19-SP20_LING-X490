@@ -5,7 +5,6 @@ from sklearn.utils import shuffle
 from sklearn.feature_extraction.text import CountVectorizer
 import sklearn.metrics
 import pandas as pd
-import random
 
 
 # Import data; TO CONSIDER: remove http://t.co/* links, NEWLINE_TOKEN
@@ -14,7 +13,6 @@ def get_data(verbose, sample_types, sample_size=10000):
     data_dir = "./data"
     data = pd.read_csv(f"{data_dir}/toxicity_annotated_comments.tsv", sep='\t', header=0)
     data.sample(frac=1)  # shuffle data
-
     to_return = []
 
     # sampled datasets
@@ -27,9 +25,9 @@ def get_data(verbose, sample_types, sample_size=10000):
     random_sample = data.sample(sample_size)  # ensures that both sets are the same size
 
     for s in sample_types:
-        if s is "Boosted":
+        if s is "boosted":
             data = boosted_data
-        elif s is "Random":
+        elif s is "random":
             data = random_sample
 
         train = data.loc[data['split'] == "train"]
@@ -75,6 +73,7 @@ def boost_data(data):
 # ML models need features, not just whole tweets
 development = True  # flag; ask for input if False
 if development:
+    print("DEVELOPMENT MODE ----------------------")
     analyzer, ngram_upper_bound, sample_size = ["word", [3], 1000]  # default values for quick fits
 else:
     print("COUNTVECTORIZER CONFIG\n----------------------")
@@ -82,15 +81,16 @@ else:
     ngram_upper_bound = input("Please enter ngram upper bound(s): ").split()
     sample_size = input("Please enter sample size (< 66839): ")
 
-sample_types = ["Boosted", "Random"]
+verbose = True  # print statement flag
+sample_types = ["boosted", "random"]
+data = get_data(verbose, sample_types, sample_size)
 
 for i in ngram_upper_bound:
     for t in range(0, len(sample_types)):
-        verbose = True  # print statement flag
-        X_train, X_test, X_dev, y_train, y_test, y_dev = get_data(verbose, sample_types, sample_size)[t]
+        X_train, X_test, X_dev, y_train, y_test, y_dev = data[t]
 
         vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
-        print(f"\nFitting {sample_types[t]}-sample CV...") if verbose else None
+        print(f"\nFitting {sample_types[t].capitalize()}-sample CV...") if verbose else None
         X_train = vec.fit_transform(X_train)
         X_test = vec.transform(X_test)
 
@@ -99,15 +99,14 @@ for i in ngram_upper_bound:
         X_test, y_test = shuffle(X_test, y_test)
 
         # Fitting the model
-        print(f"Training {sample_types[t]}-sample SVM...") if verbose else None
+        print(f"Training {sample_types[t].capitalize()}-sample SVM...") if verbose else None
         svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params
         svm.fit(X_train, y_train)
         print(f"Training complete.") if verbose else None
 
         # Testing + results
         acc_score = sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))
-
-        print(f"\nAccuracy for {sample_types[t]}-sample ({analyzer}, ngram_range(1,{i}): {acc_score}")
+        print(f"\nAccuracy ({sample_types[t].lower()}-sample, {analyzer}, ngram_range(1,{i}): {acc_score}")
 
 """ RESULTS & DOCUMENTATION
 # BOOSTED KERNEL TESTING (gamma="auto", analyzer=word, ngram_range(1,3))
