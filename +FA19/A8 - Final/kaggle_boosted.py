@@ -46,7 +46,7 @@ def get_data():
     return to_return
 
 
-# filter to boost abusive language
+# boosting; filters on abusive language
 def boost_data(data):
     lexicon_dir = "./lexicon"
     version = "base"  # or "expanded"
@@ -96,13 +96,9 @@ for i in ngram_upper_bound:
         print(f"Training complete.") if verbose else None
 
         # Testing + results
-        rand_acc = sklearn.metrics.balanced_accuracy_score(y_test,
-                                                           [random.randint(0, 1) for x in range(0, len(y_test))])
         acc_score = sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))
 
-        print(f"\nResults for {sample_types[t]}-sample ({analyzer}, ngram_range(1,{i}):")
-        print(f"Baseline Accuracy: {rand_acc}")  # random
-        print(f"Testing Accuracy:  {acc_score}")
+        print(f"\nAccuracy for {sample_types[t]}-sample ({analyzer}, ngram_range(1,{i}): {acc_score}")
 
 """ RESULTS & DOCUMENTATION
 # BOOSTED KERNEL TESTING (gamma="auto", analyzer=word, ngram_range(1,3))
