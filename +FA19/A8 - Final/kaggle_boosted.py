@@ -26,8 +26,6 @@ def get_data(verbose, sample_types, sample_size=10000):
     print(f"Boosting complete.") if verbose else None
     random_sample = data.sample(sample_size)  # ensures that both sets are the same size
 
-    print(f"len: {len(boosted_data)}")
-
     for s in sample_types:
         if s is "Boosted":
             data = boosted_data
