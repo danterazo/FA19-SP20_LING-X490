@@ -9,7 +9,7 @@
 [submodule "Department/sklearn-demo"]
 	path = Department/sklearn-demo
 	url = https://github.iu.edu/ksteimel/sklearn-demo.git
-	ignore = all
+	ignore = dirty
 [submodule "Repos/lexicon-of-abusive-words"]
 	path = Repos/lexicon-of-abusive-words
 	url = https://github.com/uds-lsv/lexicon-of-abusive-words.git
