@@ -3,6 +3,7 @@
 from sklearn.svm import SVC
 from sklearn.feature_extraction.text import CountVectorizer
 import sklearn.metrics
+from sklearn.metrics import accuracy_score
 import pandas as pd
 import numpy as np
 
@@ -140,8 +141,8 @@ for i in ngram_upper_bound:
         X_test = vec.transform(X_test)
 
         # Shuffle data (keeps indices)
-        X_train, y_train = shuffle(X_train, y_train)
-        X_test, y_test = shuffle(X_test, y_test)
+        X_train, y_train = sklearn.utils.shuffle(X_train, y_train)
+        X_test, y_test = sklearn.utils.shuffle(X_test, y_test)
 
         # Fitting the model
         print(f"Training {sample_types[t].capitalize()}-sample SVM...") if verbose else None
@@ -150,7 +151,7 @@ for i in ngram_upper_bound:
         print(f"Training complete.") if verbose else None
 
         # Testing + results
-        acc_score = sklearn.metrics.accuracy_score(y_test, svm.predict(X_test))
+        acc_score = accuracy_score(y_test, svm.predict(X_test))
         nl = "" if mode is "train" else "\n"  # groups results together when training
         print(f"{nl}Accuracy [{sample_types[t].lower()}, {analyzer}, ngram_range(1,{i})]: {acc_score}")
 
