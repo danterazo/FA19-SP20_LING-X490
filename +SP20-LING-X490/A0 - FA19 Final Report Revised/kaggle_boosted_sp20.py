@@ -5,7 +5,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 import sklearn.metrics
 from sklearn.metrics import accuracy_score
 import pandas as pd
-import numpy as np
 
 pd.options.mode.chained_assignment = None  # suppress SettingWithCopyWarning
 
