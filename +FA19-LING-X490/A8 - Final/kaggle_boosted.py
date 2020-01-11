@@ -12,7 +12,7 @@ pd.options.mode.chained_assignment = None  # suppress SettingWithCopyWarning
 # Import data; TO CONSIDER: remove http://t.co/* links, :NEWLINE_TOKEN:
 # original Kaggle dataset: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification
 def get_data(verbose, boost_threshold, sample_types, sample_size=10000):
-    data_dir = "./data"
+    data_dir = "../../Data/kaggle_svm"
     dataset = "train"  # test is classification
     data = pd.read_csv(f"{data_dir}/{dataset}.csv", sep=',')
     # data = data.iloc[:, 1:7]  # remove categorical data
