@@ -164,24 +164,12 @@ sigmoid:
 precomputed: N/A, not supported
 
 # BOOSTED CountVectorizer PARAM TESTING (kernel="linear")
-word, ngram_range(1,2):  
-word, ngram_range(1,3):  
-word, ngram_range(1,5):  
-word, ngram_range(1,10): 
-char, ngram_range(1,2):  
+word, ngram_range(1,3): 
 char, ngram_range(1,3):  
-char, ngram_range(1,5):  
-char, ngram_range(1,10): 
 
 # RANDOM CountVectorizer PARAM TESTING (kernel="linear")
-word, ngram_range(1,2):  
 word, ngram_range(1,3):  
-word, ngram_range(1,5):  
-word, ngram_range(1,10): 
-char, ngram_range(1,2):  
 char, ngram_range(1,3):  
-char, ngram_range(1,5):  
-char, ngram_range(1,10): 
 
 ## Train start (all): 
 ## Train end (word):  

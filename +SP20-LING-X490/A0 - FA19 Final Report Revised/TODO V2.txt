@@ -1,0 +1,10 @@
+Code:
+- DF dimensions
+
+Paper:
+- 2: Sampling theory
+- 2: Condition corresponding to sampling used in other datasets
+	- i.e. find hashtags in data (e.g. football), sample based off that
+- 2.1.1: describe 7 columns of numerical data
+- 2.1.2: Boosted sampling method
+- 2.1.2: Random sampling method

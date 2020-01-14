@@ -82,7 +82,7 @@ Also, I trained my original Kaggle SVM on the wrong dataset, so I wasn't able to
 \section{Results}
 The following results are taken from the current experiment and past experiments on the Kaggle dataset and related datasets. Values that have yet to be computed are marked as ``\textbf{TBD}''.
 \newpage
-Using a linear kernel \textbf{SVM}, \textbf{word} analyzer, and \textbf{ngram range} of [1,10]:
+Using a linear kernel \textbf{SVM}, \textbf{word} analyzer, and \textbf{ngram range} of [1,3]:
 \begin{center}
 	\begin{tabular}{|c|c|}
 		\hline
@@ -101,7 +101,7 @@ Compare these to old Kaggle SVM (linear \textbf{kernel}, \textbf{ngram range}=[1
 		\hline
 		\textbf{analyzer} & \textbf{Accuracy}\\
 		\hline
-		Word & 0.784221427226511\\
+		Word & $78.42$\\
 		Char & \textbf{TBD}\\
 		\hline
 	\end{tabular}
@@ -113,8 +113,8 @@ Finally, some results from the other datasets described in Wiegand's paper with 
 		\hline
 		\textbf{Dataset} & \textbf{SVM} & \textbf{RF} & \textbf{RF+GS}\\
 		\hline
-		Founta & $0.9394993045897079$ & $0.9047983310152990$ & $0.9037552155771905$\\
-		Kumar & $0.6826262626262626$ & $0.675959595959596$ & $0.6953535353535354$\\
+		Founta & $93.94$ & $90.47$ & $90.37$\\
+		Kumar & $68.26$ & $67.59$ & $69.53$\\
 		Razavi & \textbf{TBD} & \textbf{TBD} &\textbf{TBD}\\
 		Warner & \textbf{TBD} & \textbf{TBD} &\textbf{TBD}\\
 		\hline
