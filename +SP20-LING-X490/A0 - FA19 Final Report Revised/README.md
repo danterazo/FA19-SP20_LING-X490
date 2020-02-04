@@ -17,10 +17,16 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
 - [x] Feed **just** the *X* (`comment_text`) to CountVectorizer
 - [x] Use only two columns for fits: `comment_text` for *X* and `class` for *y*
 - [/] Split training data into `train` and `dev`
-    - [x] Split in `get_data()`
-    - [] Make it easy to switch from `dev` to `train` when it's time to use it
+    - Baseline:
+        - [x] Split in `get_data()`. 80% `train`, 20% `dev`
+        - [] Make it easy to switch from `dev` to `train` when it's time to use the latter
+    - If you have time:
+        - [] Implement 5-fold cross validation (time-consuming!)
+- [/] Get results! Train on **NLP** server
+- [ ] Extra time? Do parameter optimization with GridSearchCV
 
 # TODO, future
+- [] GridSearchCV parameter optimization
 - [] Clean up code, make it easy to follow and read
     - [] Consider keeping only common code in `get_data()`
         - [] Fix `boost_data()`, rename to `get_boosted_data()`
