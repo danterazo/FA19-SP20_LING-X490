@@ -27,6 +27,17 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
 - [/] Get results! Train on **NLP** server
 - [] Extra time? Do parameter optimization with GridSearchCV
     - Didn't have time but did research! (see below)
+    
+## 2/11/2020
+- [] hard-code n_grams to `n=3` for this project
+- [] GridSearchCV for parameters, don't worry about Pipeline for now (or n_grams)
+    - kernels
+    - gamma
+- [] Get results! Train on **NLP** server
+- Research paper
+    - [] email papers to Sandra
+    - Two boosted datasets: get original papers, read them, figure out what they mean by "boosting"
+    - Boosting method
 
 # TODO, future
 - [] GridSearchCV parameter optimization
