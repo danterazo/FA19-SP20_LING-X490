@@ -149,7 +149,7 @@ for i in ngram_upper_bound:
         vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
         print(f"\nFitting {sample_type[t].capitalize()}-sample CV...") if verbose else None
         X_train = vec.fit_transform(X_train["comment_text"])
-        X_test = vec.transform(X_test).transpose()
+        X_test = vec.transform(X_test)  # .transpose()
 
         # Fitting the model
         print(f"Training {sample_type[t].capitalize()}-sample SVM...") if verbose else None
@@ -157,13 +157,19 @@ for i in ngram_upper_bound:
         svm.fit(X_train, y_train)
         print(f"Training complete.") if verbose else None
 
+        y_test = y_test.transpose()  # debugging
+
         # Testing + results
         print(f"y_test shape: {y_test.shape}\n"
-              f"X_test shape: {X_test.shape}")  # debugging
+              f"X_test shape: {X_test.shape}\n"
+              f"y_test head: {y_test[0:10]}\n"
+              f"X_test head: {X_test[:, 0:10]}")  # debugging
+
+        # Sandra Q: how do I trim down the X_test size?
 
         # acc_score = accuracy_score(y_test, svm.predict(X_test))  # TODO: classification_report, macro avg 'f', Ken
         nl = "" if mode is "nohup" else "\n"  # groups results together when training
-        # print(f"{nl}Accuracy [{sample_type[t].lower()}, {analyzer}, ngram_range(1,{i})]: {acc_score}")
+        # print(f"{nl}Accuracy [{sample_type[t].lower()}, {analyzer}, ngram_range(1,{i})]: {acc_score}") # macro avg 'f'
 
         print(f"{nl}Classification Report [{sample_type[t].lower()}, {analyzer}, ngram_range(1,{i})]:\n "
               f"{classification_report(y_test, svm.predict(X_test), digits=6)}")
