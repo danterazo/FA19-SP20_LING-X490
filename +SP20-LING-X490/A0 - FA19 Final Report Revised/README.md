@@ -4,6 +4,8 @@ with `nohup`. This requires hardcoded inputs. I iterate over lists/arrays of inp
 multiple models can be trained consecutively. This means that I effectively "set it and
 forget it." With the size of the Kaggle dataset it's important to check `nohup` output for progress often!
 
+
+
 **REMEMBER: It's okay to fail in research!**
 
 ## Legend
@@ -24,9 +26,12 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
         - [] Implement 5-fold cross validation (time-consuming!)
 - [/] Get results! Train on **NLP** server
 - [] Extra time? Do parameter optimization with GridSearchCV
+    - Didn't have time but did research! (see below)
 
 # TODO, future
 - [] GridSearchCV parameter optimization
+    - Use [Pipeline](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html#building-a-pipeline)
+    - [] Replace `ngram_range` list iteration functionality with GS-CV
 - [] Clean up code, make it easy to follow and read
     - [] Consider keeping only common code in `get_data()`
         - [] Fix `boost_data()`, rename to `get_boosted_data()`

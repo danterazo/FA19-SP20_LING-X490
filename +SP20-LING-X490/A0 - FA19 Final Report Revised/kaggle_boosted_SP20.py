@@ -2,8 +2,8 @@
 # Dante Razo, drazo; due 12/18/2019 @ 11:59pm
 from sklearn.svm import SVC
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics import classification_report
 import sklearn.metrics
-from sklearn.metrics import accuracy_score
 import pandas as pd
 
 pd.options.mode.chained_assignment = None  # suppress SettingWithCopyWarning
@@ -43,15 +43,24 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=10000):  # TODO
         X = data.loc[:, data.columns != "class"]
         y = data.loc[:, data.columns == "class"]
 
+        # train: 60%, dev: 20%, test: 20%
         X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y,
-                                                                                    train_size=0.8,
+                                                                                    test_size=0.2,
                                                                                     shuffle=True,
                                                                                     random_state=42)
 
         X_train, X_dev, y_train, y_dev = sklearn.model_selection.train_test_split(X_train, y_train,
-                                                                                  test_size=0.2,
+                                                                                  test_size=0.25,
                                                                                   shuffle=True,
                                                                                   random_state=42)
+
+        print(f"SHAPES\n"
+              f"X_train: {X_train.shape}\n"
+              f"X_test: {X_test.shape}\n"
+              f"X_dev: {X_dev.shape}\n"
+              f"y_train: {y_train.shape}\n"
+              f"y_test: {y_test.shape}\n"
+              f"y_dev: {y_dev.shape}")  # debugging
 
         y_train = y_train.to_numpy()
         y_dev = y_dev.to_numpy()
@@ -111,7 +120,7 @@ if mode is "quick":  # for development. quick fits
     analyzer, ngram_upper_bound, sample_size, boost_threshold = ["word", [3], 1000, 1]
     sample_type = ["random"]
 
-elif mode is "nohup":  # nohup mode. hardcode inputs here, switch the mode above, then run!
+elif mode is "nohup":  # nohup mode. hard-code inputs here, switch the mode above, then run!
     print("NOHUP MODE -------------------------")
     analyzer = "word"
     ngram_upper_bound = [3]
@@ -127,7 +136,7 @@ else:  # user-interactive mode. Good for running locally... not good for nohup
     boost_threshold = input("Please enter the hate speech threshold: ")  # num of abusive words each entry must contain
 
 """ MAIN """
-data = get_data(verbose, boost_threshold, sample_type, sample_size)
+data = get_data(verbose, boost_threshold, sample_type, sample_size)  # array of data. [[boosted X,y], [random X,y]]
 
 # Kind of like manual GridSearchCV. TODO: replace with real GS-CV
 for i in ngram_upper_bound:
@@ -139,8 +148,8 @@ for i in ngram_upper_bound:
         # Feature engineering: Vectorizer. ML models need features, not just whole tweets
         vec = CountVectorizer(analyzer=analyzer, ngram_range=(1, int(i)))
         print(f"\nFitting {sample_type[t].capitalize()}-sample CV...") if verbose else None
-        X_train = vec.fit_transform(X_train["comment_text"])  # TODO: just "comment_text" column
-        X_test = vec.transform(X_test)
+        X_train = vec.fit_transform(X_train["comment_text"])
+        X_test = vec.transform(X_test).transpose()
 
         # Fitting the model
         print(f"Training {sample_type[t].capitalize()}-sample SVM...") if verbose else None
@@ -149,9 +158,15 @@ for i in ngram_upper_bound:
         print(f"Training complete.") if verbose else None
 
         # Testing + results
-        acc_score = accuracy_score(y_test, svm.predict(X_test))  # TODO: classification_report, macro avg 'f', Ken
-        nl = "" if mode is "train" else "\n"  # groups results together when training
-        print(f"{nl}Accuracy [{sample_type[t].lower()}, {analyzer}, ngram_range(1,{i})]: {acc_score}")
+        print(f"y_test shape: {y_test.shape}\n"
+              f"X_test shape: {X_test.shape}")  # debugging
+
+        # acc_score = accuracy_score(y_test, svm.predict(X_test))  # TODO: classification_report, macro avg 'f', Ken
+        nl = "" if mode is "nohup" else "\n"  # groups results together when training
+        # print(f"{nl}Accuracy [{sample_type[t].lower()}, {analyzer}, ngram_range(1,{i})]: {acc_score}")
+
+        print(f"{nl}Classification Report [{sample_type[t].lower()}, {analyzer}, ngram_range(1,{i})]:\n "
+              f"{classification_report(y_test, svm.predict(X_test), digits=6)}")
 
 """ RESULTS & DOCUMENTATION
 # KERNEL TESTING (RANDOM, size=50000, gamma="auto", analyzer=word, ngram_range(1,3))
