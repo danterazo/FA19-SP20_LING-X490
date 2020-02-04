@@ -5,13 +5,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 import sklearn.metrics
 from sklearn.metrics import accuracy_score
 import pandas as pd
+import math
 
 pd.options.mode.chained_assignment = None  # suppress SettingWithCopyWarning
 
 
 # Import data; TO CONSIDER: remove http://t.co/* links, :NEWLINE_TOKEN:, quotes
 # original Kaggle dataset: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification
-def get_data(verbose, boost_threshold, sample_types, sample_size=10000): # TODO: increase sample size
+def get_data(verbose, boost_threshold, sample_types, sample_size=10000):  # TODO: increase sample size
     data_dir = "../../Data/kaggle_data"
     dataset = "train"  # 'test' for classification
     data = pd.read_csv(f"{data_dir}/{dataset}.csv", sep=',', header=0)
@@ -49,8 +50,12 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=10000): # TODO:
                                                                                     random_state=42)
         y_train = y_train.to_numpy()
         y_test = y_test.to_numpy()
-        X_test = X_test[0:len(X_test)*0.8] # 80%
-        X_dev = X_test[(len(X_test)*0.8)+1:len(X_test)] # 20%
+
+        test_dev_split = math.floor(len(X_test) * 0.8)
+        test_len = len(X_test)
+
+        X_test = X_test[0:test_dev_split]  # 80%
+        X_dev = X_test[(test_dev_split + 1):test_len]  # 20%
 
         to_return.append([X_train, X_dev, y_train, y_test])
 
