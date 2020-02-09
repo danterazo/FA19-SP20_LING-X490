@@ -26,16 +26,15 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
         - [] Implement 5-fold cross validation (time-consuming!)
 - [/] Get results! Train on **NLP** server
 - [] Extra time? Do parameter optimization with GridSearchCV
-    - Didn't have time but did research! (see below)
     
 ## 2/11/2020
-- [] hard-code n_grams to `n=3` for this project
+- [x] hard-code n_grams to `n=3` for this project
 - [] GridSearchCV for parameters, don't worry about Pipeline for now (or n_grams)
     - kernels
     - gamma
 - [] Get results! Train on **NLP** server
 - Research paper
-    - [] email papers to Sandra
+    - [x] email papers to Sandra
     - Two boosted datasets: get original papers, read them, figure out what they mean by "boosting"
     - Boosting method
 
@@ -43,6 +42,7 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
 - [] GridSearchCV parameter optimization
     - Use [Pipeline](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html#building-a-pipeline)
     - [] Replace `ngram_range` list iteration functionality with GS-CV
+- [] 5-fold Cross Validation
 - [] Clean up code, make it easy to follow and read
     - [] Consider keeping only common code in `get_data()`
         - [] Fix `boost_data()`, rename to `get_boosted_data()`
