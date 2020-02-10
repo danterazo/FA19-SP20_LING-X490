@@ -29,7 +29,7 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
     
 ## 2/11/2020
 - [x] hard-code n_grams to `n=3` for this project
-- [] GridSearchCV for parameters, don't worry about Pipeline for now (or n_grams)
+- [x] GridSearchCV for parameters, don't worry about Pipeline for now (or n_grams)
     - kernels
     - gamma
 - [] Get results! Train on **NLP** server

@@ -145,7 +145,7 @@ for i in ngram_upper_bound:
         svm_model = SVC(kernel="linear", gamma="auto")
         svm_params = {'C': [0.1, 1, 10, 100, 1000],  # regularization param
                       'gamma': ["scale", "auto", 1, 0.1, 0.01, 0.001, 0.0001],  # kernel coefficient (R, P, S)
-                      'kernel': ["linear", "poly", "rbf", "sigmoid"]}
+                      'kernel': ["linear", "poly", "rbf", "sigmoid"]}  # SVM kernel (precomputed not supported)
         svm_gs = GridSearchCV(svm_model, svm_params, n_jobs=4, cv=5)
         svm_gs.fit(X_train_CV, y_train.values.ravel())
         print(f"Training complete.") if verbose else None
