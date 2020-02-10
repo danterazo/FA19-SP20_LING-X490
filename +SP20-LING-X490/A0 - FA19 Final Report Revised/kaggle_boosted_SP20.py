@@ -100,7 +100,7 @@ def boost_data(data, boost_threshold, verbose):
 
 
 """ CONFIGURATION """
-mode = "quick"  # mode switch: "quick" / "nohup" / "user"
+mode = "nohup"  # mode switch: "quick" / "nohup" / "user"
 verbose = True  # print statement flag
 sample_type = ["boosted", "random"]  # do both types of sampling
 
@@ -113,8 +113,7 @@ elif mode is "nohup":  # nohup mode. hard-code inputs here, switch the mode abov
     print("NOHUP MODE -------------------------")
     analyzer = "word"
     ngram_upper_bound = [3]
-    # sample_size = 50000  # max: 1804874
-    sample_size = 1804874
+    sample_size = 1804874  # try: 50000. max: 1804874
     boost_threshold = 1
     verbose = False
 
@@ -138,8 +137,7 @@ for i in ngram_upper_bound:
         # Feature engineering: Vectorizer. ML models need features, not just whole tweets
         vec = CountVectorizer(analyzer="word", ngram_range=(1, 1))
         print(f"\nFitting {sample_type[t].capitalize()}-sample CV...") if verbose else None
-        # X_train = vec.fit_transform(X_train)  # ["comment_text"]
-        X_train_CV = vec.fit_transform(X_train["comment_text"])  # TODO, rename this variable
+        X_train_CV = vec.fit_transform(X_train["comment_text"])
         X_test_CV = vec.transform(X_test["comment_text"])
 
         # Fitting the model
