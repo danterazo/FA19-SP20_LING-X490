@@ -1,6 +1,7 @@
 # LING-X 490 FA19 Final: Boosted Kaggle SVM
 # Dante Razo, drazo; due 12/18/2019 @ 11:59pm
 from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import classification_report
 import sklearn.metrics
@@ -127,14 +128,12 @@ else:  # user-interactive mode. Good for running locally... not good for nohup
 """ MAIN """
 data = get_data(verbose, boost_threshold, sample_type, sample_size)  # array of data. [[boosted X,y], [random X,y]]
 
-# Kind of like manual GridSearchCV. TODO: replace with real GS-CV
+# allows different ngram bounds w/o `Pipeline`
 for i in ngram_upper_bound:
 
     # Try the current parameters with each sampling type
     for t in range(0, len(sample_type)):
         X_train, X_test, y_train, y_test = data[t]
-
-        y_test = y_test.ravel() if mode is "nohup" else y_test  # fix DataConversionWarning
 
         # Feature engineering: Vectorizer. ML models need features, not just whole tweets
         vec = CountVectorizer(analyzer="word", ngram_range=(1, 1))
@@ -145,14 +144,18 @@ for i in ngram_upper_bound:
 
         # Fitting the model
         print(f"Training {sample_type[t].capitalize()}-sample SVM...") if verbose else None
-        svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params + GridSearchCV
-        svm.fit(X_train_CV, y_train)
+        svm_model = SVC(kernel="linear", gamma="auto")
+        svm_params = {'C': [0.1, 1, 10, 100, 1000],  # regularization param
+                      'gamma': ["scale", "auto", 1, 0.1, 0.01, 0.001, 0.0001],  # kernel coefficient (R, P, S)
+                      'kernel': ["linear", "poly", "rbf", "sigmoid"]}
+        svm_gs = GridSearchCV(svm_model, svm_params, n_jobs=4, cv=5)
+        svm_gs.fit(X_train_CV, y_train.values.ravel())
         print(f"Training complete.") if verbose else None
 
         # Testing + results
         nl = "" if mode is "nohup" else "\n"  # groups results together when training
         print(f"{nl}Classification Report [{sample_type[t].lower()}, {analyzer}, ngram_range(1,{i})]:\n "
-              f"{classification_report(y_test, svm.predict(X_test_CV), digits=6)}")
+              f"{classification_report(y_test, svm_gs.predict(X_test_CV), digits=6)}")
 
 """ RESULTS & DOCUMENTATION
 # KERNEL TESTING (RANDOM, size=50000, gamma="auto", analyzer=word, ngram_range(1,3))
