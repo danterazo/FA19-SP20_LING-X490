@@ -99,7 +99,7 @@ def boost_data(data, boost_threshold, verbose):
 
 
 """ CONFIGURATION """
-mode = "nohup"  # mode switch: "quick" / "nohup" / "user"
+mode = "quick"  # mode switch: "quick" / "nohup" / "user"
 verbose = True  # print statement flag
 sample_type = ["boosted", "random"]  # do both types of sampling
 
@@ -134,6 +134,8 @@ for i in ngram_upper_bound:
     for t in range(0, len(sample_type)):
         X_train, X_test, y_train, y_test = data[t]
 
+        y_test = y_test.ravel() if mode is "nohup" else y_test  # fix DataConversionWarning
+
         # Feature engineering: Vectorizer. ML models need features, not just whole tweets
         vec = CountVectorizer(analyzer="word", ngram_range=(1, 1))
         print(f"\nFitting {sample_type[t].capitalize()}-sample CV...") if verbose else None
@@ -146,8 +148,6 @@ for i in ngram_upper_bound:
         svm = SVC(kernel="linear", gamma="auto")  # TODO: tweak params + GridSearchCV
         svm.fit(X_train_CV, y_train)
         print(f"Training complete.") if verbose else None
-
-        y_test = y_test.ravel()  # fix DataConversionWarning
 
         # Testing + results
         nl = "" if mode is "nohup" else "\n"  # groups results together when training
