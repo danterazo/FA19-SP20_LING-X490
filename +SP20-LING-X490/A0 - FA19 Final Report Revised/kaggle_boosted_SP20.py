@@ -38,7 +38,7 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=10000):  # TODO
 
     for s in sample_types:
         if s is "boosted":
-            # data = boosted_data.sample(frac=1)  # reshuffle
+            # data = boosted_data.sample(frac=1)  # reshuffle # TODO
             pass  # debugging, to remove
         elif s is "random":
             data = random_sample.sample(frac=1)  # reshuffle
@@ -82,7 +82,12 @@ def boost_data(data, boost_threshold, verbose):
     # create list of abusive words
     hate = list(lexicon[lexicon["hate"]]["word"])
 
-    # topic filtering
+    filtered_data = topic_filter(data, hate, verbose)
+
+    return filtered_data
+
+
+def topic_filter(data, hate_lexicon, verbose):
     # source (built upon): https://dictionary.cambridge.org/us/topics/religion/islam/
     islam_wordbank = ["allah", "caliphate", "fatwa", "hadj", "hajj", "halal", "headscarf", "hegira", "hejira", "hijab",
                       "islam", "islamic", "jihad", "jihadi", "mecca", "minaret", "mohammeden", "mosque", "muhammad",
@@ -92,8 +97,6 @@ def boost_data(data, boost_threshold, verbose):
 
     wordbank = islam_wordbank  # allows easy toggling for when more wordbanks are added
     topic = wordbank + ["#" + word for word in wordbank]  # add hashtags too. only 19 hashtags in the OG dataset
-
-    print(f"topic: {topic}")  # debugging
 
     topic_data = data[data.isin(topic)]  # get only tweets that contain these terms
 
