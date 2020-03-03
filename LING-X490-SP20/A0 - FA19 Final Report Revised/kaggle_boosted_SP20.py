@@ -17,6 +17,8 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=10000):  # TODO
     data = data.iloc[:, 1:3]  # eyes on the prize (only focus on important columns)
     kaggle_threshold = 0.5  # from Kaggle documentation (see page)
     dev = True  # set to FALSE when its time to validate `train` dataset
+    shuffle = True  # self-explanatory
+
     to_return = []  # this function returns a list of lists. Each inner list contains `X` and `y`
 
     # create class vector
@@ -49,12 +51,12 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=10000):  # TODO
         # train: 60%, dev: 20%, test: 20%
         X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y,
                                                                                     test_size=0.2,
-                                                                                    shuffle=True,
+                                                                                    shuffle=shuffle,
                                                                                     random_state=42)
 
         X_train, X_dev, y_train, y_dev = sklearn.model_selection.train_test_split(X_train, y_train,
                                                                                   test_size=0.25,
-                                                                                  shuffle=True,
+                                                                                  shuffle=shuffle,
                                                                                   random_state=42)
 
         to_return.append([X_train, X_dev, y_train, y_dev]) if dev \
