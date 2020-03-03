@@ -94,7 +94,10 @@ def topic_filter(data, hate_lexicon, verbose):
                       "mujahideen", "muslim", "prayer", "mat", "prophet", "purdah", "ramadan", "salaam", "sehri",
                       "sharia", "shia", "sunni", "shiism", "sufic", "sufism", "suhoor", "sunna", "koran", "qur'an",
                       "yashmak"]
-    metoo_wordbank = ["metoo", "feminism"]  # TODO: expand, then combine below `combined_data`
+    metoo_wordbank = ["metoo", "feminism", "victim", "consent", "patriarchy", "sexism", "misogyny", "misandry",
+                      "misogynoir", "lgbtq", "lgbtqia", "cisgender", "transgender", "transphobia", "transmisogyny",
+                      "terf", "swef", "non-binary", "woc", "victim-blaming", "trigger", "privilege", "mansplain",
+                      "mansplaining", "manspread", "manspreading", "woke", "feminazi"]
 
     combined_wordbank = islam_wordbank + metoo_wordbank  # combine the above topics
     wordbank = combined_wordbank  # easy toggle
@@ -103,7 +106,7 @@ def topic_filter(data, hate_lexicon, verbose):
 
     topic_data = data[data.isin(topic)]  # get only tweets that contain these terms
 
-    # GOAL: have around ~1500
+    # GOAL: have around ~15,000 results
 
     print(f"filtered data size: {topic_data.shape}")  # debugging
 
