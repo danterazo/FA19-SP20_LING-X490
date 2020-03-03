@@ -113,6 +113,8 @@ def topic_filter(data, hate_lexicon, verbose):
     # source: https://en.wikipedia.org/wiki/Wikipedia:List_of_controversial_issues#History
     history_wordbank = ["Apartheid", "Nazi", "Black Panthers", "Rwandan Genocide", "Jim Crow", "KKK", "Ku Klux Klan"]
 
+    # "Jim Crow"| "KKK" | "Ku Klux Klan"
+
     # source: https://en.wikipedia.org/wiki/Wikipedia:List_of_controversial_issues#Religion
     religion_wordbank = ["jew", "judaism", "christian", "christianity", "Jesus Christ", "Baptist", "WASP", "Protestant",
                          "Westboro Baptist Church"]

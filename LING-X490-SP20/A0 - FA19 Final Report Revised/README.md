@@ -50,7 +50,7 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
 
 ## For 3/3/2020
 - Not Tweets! Wikipedia talk pages!
--  Undergrad conference: can report WIP papers
+- Undergrad conference: can report WIP papers
 - [] look at abusive examples (save as CSV for ease), then describe them with a broad topic
 - [] Save output of countvectorizer to .csv
     - If CV returns compressed format, then collect tweets with collected labels and save _that_ as a .csv
@@ -60,7 +60,18 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
     - [x] Combine topics if necessary!
 - [x] make sure that randomly-sampled part works (i.e. shuffle, then pick first `n`)
 
+# For 3/10/2020
+- [] Uncomment `hate_data` step, save as CSV, save to Box and ping Sandra
+    - [] Create frequency dictionary. Look for words that look like topics, but not abuse. MANUAL step
+- Figure out which Wikipedia pages this dataset is from, then get topic(s) from that
+    - Otherwise, will have to rethink problem
+    - PING Sandra and have her look at Kaggle dataset and look for terms to use
+- [] Get ~15000 results; Waseem dataset size
+
 # TODO, future
+- [] python regex module: compiles to Finite-state automaton to search
+    - CONSIDER if searching/boosting takes too long
+- [] CSV stuff from last time and the time before
 - [] GridSearchCV parameter optimization
     - Use [Pipeline](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html#building-a-pipeline)
     - [] Replace `ngram_range` list iteration functionality with GS-CV
