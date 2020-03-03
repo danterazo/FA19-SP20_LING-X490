@@ -40,7 +40,7 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=10000):  # TODO
 
     for s in sample_types:
         if s is "boosted":
-            # data = boosted_data.sample(frac=1)  # reshuffle # TODO
+            data = boosted_data.sample(frac=1)  # reshuffle
             pass  # debugging, to remove
         elif s is "random":
             data = random_sample.sample(frac=1)  # reshuffle
@@ -95,18 +95,40 @@ def topic_filter(data, hate_lexicon, verbose):
                       "islam", "islamic", "jihad", "jihadi", "mecca", "minaret", "mohammeden", "mosque", "muhammad",
                       "mujahideen", "muslim", "prayer", "mat", "prophet", "purdah", "ramadan", "salaam", "sehri",
                       "sharia", "shia", "sunni", "shiism", "sufic", "sufism", "suhoor", "sunna", "koran", "qur'an",
-                      "yashmak"]
+                      "yashmak", "ISIS", "ISIL", "al-Qaeda", "Taliban"]
+
+    # source: https://www.usatoday.com/story/news/2017/03/16/feminism-glossary-lexicon-language/99120600/
     metoo_wordbank = ["metoo", "feminism", "victim", "consent", "patriarchy", "sexism", "misogyny", "misandry",
                       "misogynoir", "lgbtq", "lgbtqia", "cisgender", "transgender", "transphobia", "transmisogyny",
                       "terf", "swef", "non-binary", "woc", "victim-blaming", "trigger", "privilege", "mansplain",
                       "mansplaining", "manspread", "manspreading", "woke", "feminazi"]
-    politics_wordbank = ["republican", "GOP", "democrats", "liberal", "liberals"]
 
-    combined_wordbank = islam_wordbank + metoo_wordbank + politics_wordbank  # combine the above topics
-    wordbank = combined_wordbank  # easy toggle
-    topic = wordbank + ["#" + word for word in wordbank]  # add hashtags too
+    # source: https://en.wikipedia.org/wiki/Wikipedia:List_of_controversial_issues#Politics_and_economics
+    politics_wordbank = ["republican", "GOP", "democrats", "liberal", "liberals", "abortion", "brexit",
+                         "anti-semitism", "atheism", "conservatives", "CNN", "capitalism", "communism", "Cuba",
+                         "fascism", "Fox News", "immigration", "kashmir", "harambe", "israel", "hitler", "mexico",
+                         "neoconservatism", "neoliberalism", "palestine", "9/11", "socialism", "Clinton", "Trump",
+                         "Sanders", "Guantanamo", "torture", "Flight 77", "Marijuana", "sandinistas"]
 
-    topic_data = data[data.isin(topic)]  # get only tweets that contain these terms
+    # source: https://en.wikipedia.org/wiki/Wikipedia:List_of_controversial_issues#History
+    history_wordbank = ["Apartheid", "Nazi", "Black Panthers", "Rwandan Genocide", "Jim Crow", "KKK", "Ku Klux Klan"]
+
+    # source: https://en.wikipedia.org/wiki/Wikipedia:List_of_controversial_issues#Religion
+    religion_wordbank = ["jew", "judaism", "christian", "christianity", "Jesus Christ", "Baptist", "WASP", "Protestant",
+                         "Westboro Baptist Church"]
+
+    # combine the above topics
+    combined_topics = islam_wordbank + metoo_wordbank + politics_wordbank + history_wordbank + religion_wordbank
+
+    topic = combined_topics  # easy toggle
+    wordbank = topic + ["#" + word for word in topic]  # add hashtags too
+    wordbank_regex = "|".join(wordbank)
+
+    # idea: .find() for count. useful for threshold
+    topic_data = data[data["comment_text"].str.contains(wordbank_regex)]  # boost data
+
+    print(f"topicdata head:\n {topic_data.head}\n")  # debugging
+
     return topic_data
 
 
@@ -158,7 +180,7 @@ if mode is "quick":  # for development. quick fits
     sample_type = ["random"]
 
 elif mode is "boost_test":  # for boosting development
-    print("DEVELOPMENT MODE ----------------------")
+    print("BOOSTING DEVELOPMENT MODE ----------------------")
     analyzer, ngram_upper_bound, sample_size, boost_threshold = ["word", [3], 15000, 1]
     sample_type = ["boosted"]
 
