@@ -55,8 +55,9 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
 - [] Save output of countvectorizer to .csv
     - If CV returns compressed format, then collect tweets with collected labels and save _that_ as a .csv
         - [] Save comment_text and class in separate .csv
-- [x] Shoot for ~15000 results
+- [] Shoot for ~15000 results
     - [x] Try "#metoo" / other topics for more results
+    - [x] Combine topics if necessary!
 - [x] make sure that randomly-sampled part works (i.e. shuffle, then pick first `n`)
 
 # TODO, future
