@@ -61,7 +61,7 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
 - [x] make sure that randomly-sampled part works (i.e. shuffle, then pick first `n`)
 
 # For 3/10/2020
-- [] Slack: @Sandra
+- [x] Slack: @Sandra
 - [x] Uncomment `hate_data` step, save as CSV, save to Box and ping Sandra
     - [] Create frequency dictionary. Look for words that look like topics, but not abuse. MANUAL step
 - Figure out which Wikipedia pages this dataset is from, then get topic(s) from that
