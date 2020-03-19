@@ -101,6 +101,8 @@ def topic_filter(data, hate_lexicon, verbose):
                       "sharia", "shia", "sunni", "shiism", "sufic", "sufism", "suhoor", "sunna", "koran", "qur'an",
                       "yashmak", "ISIS", "ISIL", "al-Qaeda", "Taliban"]
 
+    # TODO: see Sandra's email for suggestions
+
     # source: https://www.usatoday.com/story/news/2017/03/16/feminism-glossary-lexicon-language/99120600/
     metoo_wordbank = ["metoo", "feminism", "victim", "consent", "patriarchy", "sexism", "misogyny", "misandry",
                       "misogynoir", "lgbtq", "lgbtqia", "cisgender", "transgender", "transphobia", "transmisogyny",
