@@ -1,8 +1,5 @@
 .idea/
 
-Data/kaggle_data/*.csv
-Data/kaggle_data/*.tsv
-
 *.aux
 *.log
 *.synctex.gz
