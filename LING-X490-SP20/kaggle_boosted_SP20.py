@@ -11,7 +11,7 @@ pd.options.mode.chained_assignment = None  # suppress SettingWithCopyWarning
 
 
 def get_data(verbose, boost_threshold, sample_types, sample_size=10000):  # TODO: increase sample size
-    data_dir = "../../data/kaggle_data"  # common directory for all datasets
+    data_dir = "../data/kaggle_data"  # common directory for all datasets
     dataset = "train"  # 'test' for classification problem
     data = pd.read_csv(f"{data_dir}/{dataset}.csv", sep=',', header=0)  # import Kaggle data
     data = data.iloc[:, 1:3]  # eyes on the prize (only focus on important columns)
@@ -72,7 +72,7 @@ def boost_data(data, boost_threshold, verbose):
 
     # hate speech lexicon tasks
     # import
-    lexicon_dir = "./lexicon"
+    lexicon_dir = "lexicon"
     version = "base"  # or "expanded"
     df = pd.read_csv(f"{lexicon_dir}/{version}Lexicon.txt", sep='\t', header=None)
     lexicon = pd.DataFrame(columns=["word", "part", "hate"])
@@ -132,8 +132,6 @@ def topic_filter(data, hate_lexicon, verbose):
     wordbank = topic + ["#" + word for word in topic]  # add hashtags too
     wordbank_regex = "|".join(wordbank)
 
-    # TODO: add caps versions too?
-
     # idea: .find() for count. useful for threshold
     topic_data = data[data["comment_text"].str.contains(wordbank_regex)]  # boost data
 
@@ -147,7 +145,7 @@ def boost_data_OLD(data, boost_threshold, verbose):
 
     # hate speech lexicon tasks
     # import
-    lexicon_dir = "./lexicon"
+    lexicon_dir = "lexicon"
     version = "base"  # or "expanded"
     df = pd.read_csv(f"{lexicon_dir}/{version}Lexicon.txt", sep='\t', header=None)
     lexicon = pd.DataFrame(columns=["word", "part", "hate"])
