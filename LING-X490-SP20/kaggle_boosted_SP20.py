@@ -130,10 +130,12 @@ def topic_filter(data, hate_lexicon, verbose):
 
     topic = combined_topics  # easy toggle
     wordbank = topic + ["#" + word for word in topic]  # add hashtags too
+    # TODO: add caps too
+    wordbank = list(dict.fromkeys(wordbank))  # remove dupes
     wordbank_regex = "|".join(wordbank)
 
     # idea: .find() for count. useful for threshold
-    topic_data = data[data["comment_text"].str.contains(wordbank_regex)]  # boost data
+    topic_data = data[data["comment_text"].str.contains(wordbank_regex)]  # boost data; TODO: redo this
 
     print(f"topicdata head:\n {topic_data.head}\n")  # debugging
 
