@@ -87,6 +87,12 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
         - Paper hypothesis: % of explicit offense makes it easier for classifier
         - e.g. "Women belong in the kitchen"
     - [] Their experiment but we remove unoffensive words (e.g. vomit)
+    
+# TODO, after SPR break
+- [] baseline. create train/test
+    - 80/20 or 90/10
+    - shuffle before
+    - train on 80, test on 20. file away, then go back to testing on small samples.
 
 # TODO, future
 - [] FUTURE: potentially sample only implicit tweets
