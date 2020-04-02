@@ -1,9 +1,11 @@
 # LING-X 490 FA19 Final: Boosted Kaggle SVM
 # Dante Razo, drazo
+
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import classification_report
+from string import capwords
 import sklearn.metrics
 import pandas as pd
 
@@ -105,19 +107,19 @@ def topic_filter(data, hate_lexicon, verbose):
 
     # source: https://www.usatoday.com/story/news/2017/03/16/feminism-glossary-lexicon-language/99120600/
     metoo_wordbank = ["metoo", "feminism", "victim", "consent", "patriarchy", "sexism", "misogyny", "misandry",
-                      "misogynoir", "lgbtq", "lgbtqia", "cisgender", "transgender", "transphobia", "transmisogyny",
+                      "misogynoir", "cisgender", "transgender", "transphobia", "transmisogyny",
                       "terf", "swef", "non-binary", "woc", "victim-blaming", "trigger", "privilege", "mansplain",
                       "mansplaining", "manspread", "manspreading", "woke", "feminazi"]
 
     # source: https://en.wikipedia.org/wiki/Wikipedia:List_of_controversial_issues#Politics_and_economics
     politics_wordbank = ["republican", "GOP", "democrats", "liberal", "liberals", "abortion", "brexit",
-                         "anti-semitism", "atheism", "conservatives", "CNN", "capitalism", "communism", "Cuba",
+                         "anti-semitism", "atheism", "conservatives", "capitalism", "communism", "Cuba",
                          "fascism", "Fox News", "immigration", "kashmir", "harambe", "israel", "hitler", "mexico",
                          "neoconservatism", "neoliberalism", "palestine", "9/11", "socialism", "Clinton", "Trump",
                          "Sanders", "Guantanamo", "torture", "Flight 77", "Marijuana", "sandinistas"]
 
     # source: https://en.wikipedia.org/wiki/Wikipedia:List_of_controversial_issues#History
-    history_wordbank = ["Apartheid", "Nazi", "Black Panthers", "Rwandan Genocide", "Jim Crow", "KKK", "Ku Klux Klan"]
+    history_wordbank = ["Apartheid", "Nazi", "Black Panthers", "Rwandan Genocide", "Jim Crow", "Ku Klux Klan"]
 
     # source: https://en.wikipedia.org/wiki/Wikipedia:List_of_controversial_issues#Religion
     religion_wordbank = ["jew", "judaism", "christian", "christianity", "Jesus Christ", "Baptist", "WASP", "Protestant",
@@ -128,19 +130,25 @@ def topic_filter(data, hate_lexicon, verbose):
                        "election", "party", "president", "politician", "women", "woman", "fact", "military", "citizen",
                        "nation", "church", "christian", "muslim", "liberal", "democrat", "republican", "religion",
                        "religious", "administration", "immigrant", "gun", "science", "freedom", "solution",
-                       "corportate"]
+                       "corporate"]
+
+    # words with special capitalization rules; except from capwords() function call below
+    special_caps = ["al-Qaeda", "CNN", "KKK", "LGBT", "LGBTQ", "LGBTQIA"]
 
     # future: https://thebestschools.org/magazine/controversial-topics-research-starter/
 
     # combine the above topics
     combined_topics = islam_wordbank + metoo_wordbank + politics_wordbank + history_wordbank + religion_wordbank + \
-                      sandra_wordbank
+                      sandra_wordbank + special_caps
 
-    topic = combined_topics  # easy toggle if you want to focus on a specific topic
-    wordbank = topic + ["#" + word for word in topic]  # add hashtags too
-    # TODO: add caps too
-    wordbank = list(dict.fromkeys(wordbank))  # remove dupes
-    wordbank_regex = "|".join(wordbank)
+    topic = combined_topics  # easy toggle if you want to focus on a specific topic instead
+    topic = list(dict.fromkeys(topic))  # remove dupes
+
+    wordbank = [t.lower() for t in topic]  # lowercase all in topic[]...
+    wordbank = wordbank + [capwords(w) for w in wordbank] + special_caps  # ...add capitalized versions...
+    wordbank = wordbank + ["#" + word for word in topic]  # ...then add hashtags for all words
+    wordbank = list(dict.fromkeys(wordbank))  # remove dupes again cause once isn't enough for some reason
+    wordbank_regex = "|".join(wordbank)  # form "regex" string
 
     # idea: .find() for count. useful for threshold
     topic_data = data[data["comment_text"].str.contains(wordbank_regex)]  # boost data; TODO: redo this
