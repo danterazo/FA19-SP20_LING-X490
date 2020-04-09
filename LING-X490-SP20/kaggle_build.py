@@ -42,6 +42,11 @@ def convert_manual_abusive():
     pass
 
 
+# get stats on manually-classified dataset
+def manual_analysis():
+    pass
+
+
 # Takes Kaggle dataset, filters on topic, then saves new data to `.csv`
 def filter_kaggle():
     pass
