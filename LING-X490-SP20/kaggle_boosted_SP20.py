@@ -12,10 +12,10 @@ import pandas as pd
 pd.options.mode.chained_assignment = None  # suppress SettingWithCopyWarning
 
 
-def get_data(verbose, boost_threshold, sample_types, sample_size=15000):  # TODO: increase sample size
+def get_data(verbose, boost_threshold, sample_types, sample_size=15000):
     data_dir = "../data/kaggle_data"  # common directory for all datasets
     dataset = "train.target+comments.tsv"  # 'test' for classification problem
-    print(f"Importing `{dataset}`...")  # progress indicator
+    print(f"Importing `{dataset}`...") if verbose else None  # progress indicator
     dataList = []  # temporary; used for constructing dataframe
 
     # import data
@@ -28,7 +28,7 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=15000):  # TODO
                 dataList.append([float(splitLine[0]), splitLine[1]])
 
     data = pd.DataFrame(dataList, columns=["score", "comment_text"])
-    print(f"Data {data.shape} imported")  # progress indicator
+    print(f"Data {data.shape} imported") if verbose else None  # progress indicator
 
     kaggle_threshold = 0.50  # from Kaggle documentation (see page)
     dev = True  # set to FALSE when its time to validate `train` dataset
@@ -38,8 +38,6 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=15000):  # TODO
     # create class vector
     data["class"] = 0
     data.loc[data.score >= kaggle_threshold, "class"] = 1
-
-    print(f"Head:\n{data.head}")  # debugging
 
     # sampled datasets
     data_len = len(data)
@@ -161,9 +159,6 @@ def topic_filter(data, hate_lexicon, verbose):
 
     # idea: .find() for count. useful for threshold
     topic_data = data[data["comment_text"].str.contains(wordbank_regex)]  # boost data; TODO: redo this
-
-    print(f"topicdata head:\n {topic_data.head}\n")  # debugging
-
     return topic_data
 
 
