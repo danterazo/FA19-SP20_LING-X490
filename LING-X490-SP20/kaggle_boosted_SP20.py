@@ -24,13 +24,10 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=15000):  # TODO
 
         for e in entries:
             splitLine = e.split("\t", 1)
-            if len(splitLine) is 2:
+            if len(splitLine) is 2:  # else: there's no score, so throw the example out
                 dataList.append([float(splitLine[0]), splitLine[1]])
-            else:  # else, there's no score
-                dummyScore = 0.0
-                dataList.append([dummyScore, splitLine[0]])
 
-    data = pd.DataFrame(dataList, columns=["score", "text"])
+    data = pd.DataFrame(dataList, columns=["score", "comment_text"])
     print(f"Data {data.shape} imported")  # progress indicator
 
     kaggle_threshold = 0.50  # from Kaggle documentation (see page)
