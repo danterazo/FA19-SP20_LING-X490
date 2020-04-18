@@ -1,1 +1,0 @@
-Thank you for helping me debunk the Linux FUD engine , Stuart = ) So what was that you linux FUDsters were saying about Microsoft not supporting Internet Standard protocols ? Chad Myers Have you recompiled your kernel today ? [ Snip : technical documentation on Win2Ks interoperability with Unix KDCs or Kerberos clients ] 

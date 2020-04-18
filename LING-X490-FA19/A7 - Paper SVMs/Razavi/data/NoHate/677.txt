@@ -1,1 +1,0 @@
-I am trying to find the manufactories of linear IC optocouplers. They contain a common LED emitter and dual phototransistors. One phototransistor is used for optocoupling and the other is used for feedback to make the transfer function linear. TIA harry 

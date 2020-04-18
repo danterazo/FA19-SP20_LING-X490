@@ -1,1 +1,0 @@
-I have a firewall with everything inbound blocked except port 80. Are there Thanks , -Caliphalestrian The only exploit would be with html editing programs that can read password protection and execute brute force attacks on usernames with dictionary cracks for finding the password. Denial of Service Prevention AND Network Security Information 

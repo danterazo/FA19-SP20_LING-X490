@@ -1,1 +1,0 @@
-The rexx script in my startup.cmd doesnt function. It appears I have lost REXX support w/ out trying to remove it. I dont see it in selective install. How do I restore REXX ? Thanks , Brian 

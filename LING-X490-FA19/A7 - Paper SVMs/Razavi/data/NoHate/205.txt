@@ -1,1 +1,0 @@
-The one attribute that is doubly specified is dummy argumentness. The variable is in the argument list ( where else ? ) and also must be typed and have an intent declared ( unless it is a pointer ) . I dont see an easy way to avoid that. I also like the forced INTENT declaration. It might convince compiler writers to actually make use of that information. Jan 

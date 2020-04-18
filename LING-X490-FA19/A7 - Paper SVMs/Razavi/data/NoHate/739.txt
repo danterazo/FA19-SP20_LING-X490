@@ -1,1 +1,0 @@
-Hi , I ve a problem : I have written a small Programm and now i will be publishing it but i wont use the VB5 Setup wizard , because i cant configure it for my wishes. I need a setup , where i can give settings for the user so that the user do what i want. Stefan , Germany 

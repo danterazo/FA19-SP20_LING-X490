@@ -1,1 +1,0 @@
-A friend and I discovered recently that when you send a message using the from the message headers. This didnt happen with my dial-up isp AFAIK. Is something that I am doing wrong ? Thanks , Carl 

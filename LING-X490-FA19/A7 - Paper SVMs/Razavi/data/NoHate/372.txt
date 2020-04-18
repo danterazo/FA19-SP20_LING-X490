@@ -1,1 +1,0 @@
-On Thu , 14 Oct 1999 -0400 in comp.lang.c + + , " Michael P. Ross " Does anyone have a sample of this program C + + ? This issue is covered in Marshall Clines C + + FAQ. See the topic " [ 5.2 ] How do I get comp.lang.c + + to do my homework problem for me ? " It is always good to check the FAQ before posting. You can get the FAQ at : 

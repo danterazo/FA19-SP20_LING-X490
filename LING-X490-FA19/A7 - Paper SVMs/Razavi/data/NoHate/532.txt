@@ -1,1 +1,0 @@
-I would guess that you need the SAVE attribute for your arrays TT2 as they are local to the reallocate subroutines and can be removed from heap storage.  Regards ,  Mike Metcalf   

@@ -1,1 +1,0 @@
-[ snip ] The Bios wont auto detect past 2 gigs. [ snip ] Why not see if there is a BIOS update for it ? Might be the best solution. Klaatu barada nikto 

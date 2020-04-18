@@ -1,1 +1,0 @@
-I have similar problem with s90. I couldnt find any solution to fix this problem. I am getting a really distorted sound occasionally with my sonic impact s90. If I reboot , it tends to go away. I have installed DX7.0 and the new reference drivers from Aureal. Are there any issues dealing with these drivers etc. or should I look to another area for the problem ? Nick 

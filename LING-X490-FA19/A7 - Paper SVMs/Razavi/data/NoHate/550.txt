@@ -1,1 +1,0 @@
-I want to pickup for example a name ( the name must remain visible ( as icon ? ? ) during the dragprocess and put it on another mdi-form. Is this possible in VB6 ? ? Thnx ! 

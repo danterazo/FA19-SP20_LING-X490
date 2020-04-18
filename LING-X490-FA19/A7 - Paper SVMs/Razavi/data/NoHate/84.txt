@@ -1,1 +1,0 @@
-Whats really needed is tri-state logic : X .EQ. Y , X .NE. Y , X .UNORDERED. Y Arent there intrinsics for that - such as ISNAN , ISFINITE , and company ? Jan 

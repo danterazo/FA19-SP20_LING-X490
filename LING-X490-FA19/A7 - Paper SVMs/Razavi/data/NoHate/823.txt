@@ -1,1 +1,0 @@
-few programmers would intentionally use ( X .EQ. X ) unless they wanted IEEE If the compiler wishes to perform such optimizations , it should distinguish between expressions containing constants and those containing variables. Tim Prince 

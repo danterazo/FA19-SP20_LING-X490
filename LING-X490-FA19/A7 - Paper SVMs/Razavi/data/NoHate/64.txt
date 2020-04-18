@@ -1,1 +1,0 @@
-Why is this : # include iostream.h int main ( ) { cout ( 34 , 67 ) endl ; retrun 0 ; } Result : 67. It always prints out the last parameter inside the parentheses. Thanks for the answer . 

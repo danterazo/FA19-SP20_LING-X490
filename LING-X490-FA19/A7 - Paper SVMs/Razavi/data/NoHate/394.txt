@@ -1,1 +1,0 @@
-ok fixed it,i went to another program. " syshield 1.1 ver. " i do have win98 so i dont have any problems.all those port that where open is now closed or filteredthanks to everyone out there how tryied to help methanks. my port 53,139 and 12345 is opened. i have a firewall program.how do i closed all 3 of these ports . 

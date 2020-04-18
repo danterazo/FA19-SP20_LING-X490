@@ -1,1 +1,0 @@
-Will OS2 and Linux run Window applications like MS Office , Quicken as well as lesser known applications ? OS2 will run old WIN 3.1 applications very well , but not WIN95 or WIN98 or WINNT aplications. Just to be clear , OS/2 v4 supports most Windows 3.x and Win32s up to v1.25a apps. Klaatu barada nikto 

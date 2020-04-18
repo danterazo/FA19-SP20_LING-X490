@@ -1,1 +1,0 @@
-my port 53,139 and 12345 is opened. i have a firewall program.how do i closed all 3 of these ports . 

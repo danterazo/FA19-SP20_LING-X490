@@ -1,1 +1,0 @@
-The only true way of locating the source of an email is to read the headers. The headers will always have the originating IP address. now that there are so many companies offering free email accounts , is there any way one can find out if various emails are really comming from one source ? Thank you Posted via CNET Help.com 

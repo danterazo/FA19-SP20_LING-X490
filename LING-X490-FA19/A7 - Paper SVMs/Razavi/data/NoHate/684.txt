@@ -1,1 +1,0 @@
-I am seeking for c + + source code for displaying GIF image file on screen. Could you give a direction ? Direction- A newsgroup specific to your compiler and operating system. There is no way to do that using only standard C + + . Bart. # include stddiscalimer.h . if ( replyspam ) cout " Go away ! " endl ; else cout " bartkowalski " at " programmer dot " net endl ; 

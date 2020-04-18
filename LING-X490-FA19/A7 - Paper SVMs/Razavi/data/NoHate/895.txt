@@ -1,1 +1,0 @@
-Clarification I am only allowing port 80 inbound to the webserver. The webserver must remain behind the firewall ( groan ) . The webserver is NT running IIS 4.0 I believe. Are there ways of stopping these exploits without shutting down port 80 ? Thank you , Caliphalestrian I have a firewall with everything inbound blocked except port 80. Are there Thanks , -Caliphalestrian 

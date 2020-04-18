@@ -1,1 +1,0 @@
-Hello all , My company is planning to purchase a firewall software. Currently , we found three potential candidates , there are ( 1 ) Checkpoint Firewall-1 , ( 2 ) IBM e-Network Firewall , ( 3 ) Sun Screen Do any one have comments on these three firewall in term of management , functions , cost . etc ? Also , any other good suggestions fo brand ? Thanx a lots ! Henry Chui 
