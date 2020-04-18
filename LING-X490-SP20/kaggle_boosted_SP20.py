@@ -27,6 +27,8 @@ def get_data(verbose, boost_threshold, sample_types, sample_size=15000):
 
             if len(splitLine) is 2:  # else: there's no score, so throw the example out
                 data_list.append([float(splitLine[0]), splitLine[1]])
+            else:
+                print(f"error: {splitLine}")  # debugging
 
     data = pd.DataFrame(data_list, columns=["score", "comment_text"])
     print(f"Data {data.shape} imported!") if verbose else None  # progress indicator
@@ -142,11 +144,14 @@ def topic_filter(data, hate_lexicon, verbose):
     # words with special capitalization rules; except from capwords() function call below
     special_caps = ["al-Qaeda", "CNN", "KKK", "LGBT", "LGBTQ", "LGBTQIA"]
 
+    # abusive words in explicit examples
+    explicitly_abusive = ["sh*tty", ""]
+
     # future: https://thebestschools.org/magazine/controversial-topics-research-starter/
 
     # combine the above topics
     combined_topics = islam_wordbank + metoo_wordbank + politics_wordbank + history_wordbank + religion_wordbank + \
-                      sandra_wordbank + special_caps
+                      sandra_wordbank + special_caps + explicitly_abusive
 
     topic = combined_topics  # easy toggle if you want to focus on a specific topic instead
     topic = list(dict.fromkeys(topic))  # remove dupes

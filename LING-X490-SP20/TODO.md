@@ -102,8 +102,22 @@ forget it." With the size of the Kaggle dataset it's important to check `nohup` 
     - 4 classes: mildly abusive, very abusive, not hate, ?
 - abusive = you say if you want to hurt someone
 - add more words to wordbank
-- upload filtered target+comments (topics) dataset for Brooklyn
+- [x] upload filtered target+comments (topics) dataset for Brooklyn
 - goal: 15000; call it a day at 10000
+- PROGRESS: converted to run on train.target+comments
+
+# TODO, after SPR break III
+- [] URGENT: finish hate speech list
+- [] Figure out differences between R-imported and Python data
+    - Unix `diff`. Save train from R, use `diff`, then compare two
+- [] Ask Sandra to change delimiter (?)
+- [] count how often people agree
+    - consider collapsing mildly + very abusive
+    - look at ones with low agreement
+    - consider agreement rate, that determines how far we go
+    - might have to do one last round
+    - Wiegand was automatic, hence uncommon false flags
+- [] Sort this list!!!!
 
 # TODO, future
 - [] FUTURE: potentially sample only implicit tweets
