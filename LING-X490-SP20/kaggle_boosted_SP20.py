@@ -145,7 +145,7 @@ def topic_filter(data, hate_lexicon, verbose):
     special_caps = ["al-Qaeda", "CNN", "KKK", "LGBT", "LGBTQ", "LGBTQIA"]
 
     # abusive words in explicit examples
-    explicitly_abusive = ["sh*tty", ""]
+    explicitly_abusive = ["sh*tty"]
 
     # future: https://thebestschools.org/magazine/controversial-topics-research-starter/
 
