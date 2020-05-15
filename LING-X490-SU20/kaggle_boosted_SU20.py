@@ -84,7 +84,7 @@ def boost_data(data, boost_threshold, verbose):
 
     # hate speech lexicon tasks
     # import
-    lexicon_dir = "lexicon"
+    lexicon_dir = "../data/kaggle_data/lexicon"
     version = "base"  # or "expanded"
     df = pd.read_csv(f"{lexicon_dir}/{version}Lexicon.txt", sep='\t', header=None)
     lexicon = pd.DataFrame(columns=["word", "part", "hate"])
