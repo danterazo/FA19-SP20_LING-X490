@@ -11,10 +11,11 @@ import sklearn.metrics
 import pandas as pd
 
 """ GLOBAL VARIABLES """
+# pd.options.mode.chained_assignment = None  # suppress SettingWithCopyWarning
 verbose = True  # if I didn't define it globally then I'd be passing it to every f() like a React prop
 
 
-def get_data(sample_size):
+def get_data(dev):
     random_data = get_random_data()
     boosted_data = get_boosted_data()
 
@@ -25,22 +26,32 @@ def get_data(sample_size):
         random_data = random_data[0:min_sample_size]  # trim
         boosted_data = boosted_data[0:min_sample_size]  # trim
 
-    # TODO: shuffle each df before returning?
+    # split data into X, y
+    random_splits = split_data(random_data, dev)
+    boosted_splits = split_data(boosted_data, dev)
 
     # return data and identifiers
-    return [[random_data, "random"], [boosted_data, "boosted"]]
+    return [[random_splits, "random"], [boosted_splits, "boosted"]]
 
 
-# already defined. just import
-def get_random_data():
-    return read_data("train.random.csv", delimiter="comma")
+# split into: train, test, dev
+def split_data(data, dev, shuffle=True):
+    X = data.loc[:, data.columns != "class"]
+    y = data.loc[:, data.columns == "class"]
 
+    # train: 60%, dev: 20%, test: 20%
+    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y,
+                                                                                test_size=0.2,
+                                                                                shuffle=shuffle,
+                                                                                random_state=42)
 
-def get_boosted_data():
-    df = read_data("train.target+comments.tsv", delimiter="tab")
+    X_train, X_dev, y_train, y_dev = sklearn.model_selection.train_test_split(X_train, y_train,
+                                                                              test_size=0.25,
+                                                                              shuffle=shuffle,
+                                                                              random_state=42)
 
-    # WIP
-    return df
+    # use dev sets if dev=TRUE
+    return [X_train, X_dev, y_train, y_dev] if dev else [X_train, X_test, y_train, y_test]
 
 
 def read_data(dataset, delimiter, verbose=True):
@@ -76,6 +87,22 @@ def read_data(dataset, delimiter, verbose=True):
     return data
 
 
+# already defined. just import
+def get_random_data():
+    return read_data("train.random.csv", delimiter="comma")
+
+
+# TODO
+def get_boosted_data():
+    df = read_data("train.target+comments.tsv", delimiter="tab")
+
+    # WIP
+    return df
+
+
+""" WORK """
+
+
 def main(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
     """
     verbose (boolean):  toggles print statements
@@ -84,6 +111,7 @@ def main(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
     analyzer (str):     either "word" or "char". for CountVectorizer
     ngram_range (()):   tuple containing lower and upper ngram bounds for CountVectorizer
     gridsearch (bool):  toggles SVM gridsearch functionality (significantly increases fit time)
+    dev (bool):         toggles whether `dev` sets are used. False for `test` sets
     """
 
     all_data = get_data(verbose, sample_size)  # array of data. [[boosted X,y], [random X,y]]
@@ -95,7 +123,7 @@ def main(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
         all_data = all_data[1]
 
     for sample in all_data:
-        data = sample[0]  # first member of tuple is the dataframe
+        data = sample[0]  # first member of tuple is an array of splits
         sample_type = sample[1]  # second member of tuple is a string
 
         X_train, X_test, y_train, y_test = data
@@ -132,5 +160,6 @@ samples = "Both"
 analyzer = "word"
 ngram_range = (1, 1)
 gridsearch = True
+dev = False
 
 main(verbose, sample_size, samples, analyzer, ngram_range, gridsearch)
