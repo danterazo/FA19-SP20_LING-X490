@@ -15,7 +15,7 @@ import re
 verbose = True  # if I didn't define it globally then I'd be passing it to every f() like a React prop
 
 
-def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
+def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch, manual_boost):
     """
     verbose (boolean):  toggles print statements
     sample_size (int):  size of sampled datasets. If set too high, the smaller size will be used
@@ -24,9 +24,10 @@ def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
     ngram_range (()):   tuple containing lower and upper ngram bounds for CountVectorizer
     gridsearch (bool):  toggles SVM gridsearch functionality (significantly increases fit time)
     dev (bool):         toggles whether `dev` sets are used. False for `test` sets
+    manual_boost ([str]):   use given array of strings for filtering instead of built-in wordbanks. Or pass `None`
     """
 
-    all_data = get_data(verbose, sample_size)  # array of data. [[boosted X,y], [random X,y]]
+    all_data = get_data(verbose, sample_size, manual_boost)  # array of data. [[boosted X,y], [random X,y]]
 
     # choose one or the other if applicable
     if samples is "random":
@@ -42,7 +43,7 @@ def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
 
         # Feature engineering: Vectorizer. ML models need features, not just whole tweets
         vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
-        print(f"\nFitting {sample_type.capitalize()}-sample CV...") if verbose else None
+        print(f"Fitting {sample_type.capitalize()}-sample CV...") if verbose else None
         X_train_CV = vec.fit_transform(X_train["comment_text"])
         X_test_CV = vec.transform(X_test["comment_text"])
 
@@ -62,16 +63,16 @@ def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
         print(f"Training complete.") if verbose else None
 
         # Testing + results
-        print(f"\nClassification Report [{sample_type.lower()}, {analyzer}, ngram_range(1,{i})]:\n "
+        print(f"\nClassification Report [{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n "
               f"{classification_report(y_test, svm_fitted.predict(X_test_CV), digits=6)}")
 
 
 """ IMPORT DATA """
 
 
-def get_data(dev, sample_size):
+def get_data(dev, sample_size, manual_boost):
     random_data = get_random_data()[0:sample_size]
-    boosted_data = get_boosted_data()[0:sample_size]
+    boosted_data = get_boosted_data(manual_boost)[0:sample_size]
 
     # trim both to size if necessary. failsafe
     if len(random_data) is not len(boosted_data):
@@ -147,12 +148,12 @@ def get_random_data():
 
 
 # TODO
-def get_boosted_data():
+def get_boosted_data(manual_boost):
     data = read_data("train.target+comments.tsv", delimiter="tab")
 
     # boost_data() # TODO
 
-    filtered_data = filter_data(data)
+    filtered_data = filter_data(data, manual_boost)
     return filtered_data  # TODO: fix
 
 
@@ -240,15 +241,17 @@ def filter_data(data, topics=None):
 
     # idea: .find() for count. useful for threshold
     filtered_data = data[data["comment_text"].str.contains(wordbank_regex)]
+    print(f"Data filtered to size {filtered_data.shape[0]}.\n") if verbose else None
     return filtered_data
 
 
 """ SCRIPT CONFIG """
-sample_size = 10000  # formerly 15000
-samples = "Both"
+sample_size = 10000  # int. formerly 15000
+samples = "both"  # "random", "boosted", or "both"
 analyzer = "word"
-ngram_range = (1, 1)
+ngram_range = (1, 1)  # int 2-tuple / couple
 gridsearch = True
 dev = False
+manual_boost = ["trump"]  # None, or an array of strings
 
-fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch)
+fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch, manual_boost)

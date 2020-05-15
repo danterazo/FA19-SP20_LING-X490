@@ -41,6 +41,7 @@
 
 ## Questions/comments for 2020-05-15
 - For Sandra: issue was I cut dataset down to sample size too early. so it was filtering on only the first 10000 comments
+    - 3:50am
 - Define "boosting" and modify boost_data() appropriately (right now, it just filters)
     - Q: "Is it just filtering or something more?"
     - Refer to Wiegand, Sec. 3 (pg. 2)
