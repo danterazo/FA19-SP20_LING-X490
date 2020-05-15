@@ -14,6 +14,58 @@ import pandas as pd
 # pd.options.mode.chained_assignment = None  # suppress SettingWithCopyWarning
 verbose = True  # if I didn't define it globally then I'd be passing it to every f() like a React prop
 
+
+def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
+    """
+    verbose (boolean):  toggles print statements
+    sample_size (int):  size of sampled datasets. If set too high, the smaller size will be used
+    samples ([str]):    three choices: "boosted" for only boosted, "random", or "both"
+    analyzer (str):     either "word" or "char". for CountVectorizer
+    ngram_range (()):   tuple containing lower and upper ngram bounds for CountVectorizer
+    gridsearch (bool):  toggles SVM gridsearch functionality (significantly increases fit time)
+    dev (bool):         toggles whether `dev` sets are used. False for `test` sets
+    """
+
+    all_data = get_data(verbose, sample_size)  # array of data. [[boosted X,y], [random X,y]]
+
+    # choose one or the other if applicable
+    if samples is "random":
+        all_data = all_data[0]
+    elif samples is "boosted":
+        all_data = all_data[1]
+
+    for sample in all_data:
+        data = sample[0]  # first member of tuple is an array of splits
+        sample_type = sample[1]  # second member of tuple is a string
+
+        X_train, X_test, y_train, y_test = data
+
+        # Feature engineering: Vectorizer. ML models need features, not just whole tweets
+        vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
+        print(f"\nFitting {sample_type.capitalize()}-sample CV...") if verbose else None
+        X_train_CV = vec.fit_transform(X_train["comment_text"])
+        X_test_CV = vec.transform(X_test["comment_text"])
+
+        # Fitting the model
+        print(f"Training {sample_type.capitalize()}-sample SVM...") if verbose else None
+        svm_model = SVC(kernel="linear")
+
+        if gridsearch:
+            svm_params = {'C': [0.1, 1, 10, 100, 1000],  # regularization param
+                          'gamma': ["scale", "auto", 1, 0.1, 0.01, 0.001, 0.0001],  # kernel coefficient (R, P, S)
+                          'kernel': ["linear", "poly", "rbf", "sigmoid"]}  # SVM kernel (precomputed not supported)
+            svm_gs = GridSearchCV(svm_model, svm_params, n_jobs=4, cv=5)
+            svm_fitted = svm_gs.fit(X_train_CV, y_train.values.ravel())
+        else:
+            svm_fitted = svm_model.fit(X_train, y_train)
+
+        print(f"Training complete.") if verbose else None
+
+        # Testing + results
+        print(f"\nClassification Report [{sample_type.lower()}, {analyzer}, ngram_range(1,{i})]:\n "
+              f"{classification_report(y_test, svm_fitted.predict(X_test_CV), digits=6)}")
+
+
 """ IMPORT DATA """
 
 
@@ -191,58 +243,7 @@ def filter_data(data, topics=[]):
     return topic_data
 
 
-def main(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
-    """
-    verbose (boolean):  toggles print statements
-    sample_size (int):  size of sampled datasets. If set too high, the smaller size will be used
-    samples ([str]):    three choices: "boosted" for only boosted, "random", or "both"
-    analyzer (str):     either "word" or "char". for CountVectorizer
-    ngram_range (()):   tuple containing lower and upper ngram bounds for CountVectorizer
-    gridsearch (bool):  toggles SVM gridsearch functionality (significantly increases fit time)
-    dev (bool):         toggles whether `dev` sets are used. False for `test` sets
-    """
-
-    all_data = get_data(verbose, sample_size)  # array of data. [[boosted X,y], [random X,y]]
-
-    # choose one or the other if applicable
-    if samples is "random":
-        all_data = all_data[0]
-    elif samples is "boosted":
-        all_data = all_data[1]
-
-    for sample in all_data:
-        data = sample[0]  # first member of tuple is an array of splits
-        sample_type = sample[1]  # second member of tuple is a string
-
-        X_train, X_test, y_train, y_test = data
-
-        # Feature engineering: Vectorizer. ML models need features, not just whole tweets
-        vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
-        print(f"\nFitting {sample_type.capitalize()}-sample CV...") if verbose else None
-        X_train_CV = vec.fit_transform(X_train["comment_text"])
-        X_test_CV = vec.transform(X_test["comment_text"])
-
-        # Fitting the model
-        print(f"Training {sample_type.capitalize()}-sample SVM...") if verbose else None
-        svm_model = SVC(kernel="linear")
-
-        if gridsearch:
-            svm_params = {'C': [0.1, 1, 10, 100, 1000],  # regularization param
-                          'gamma': ["scale", "auto", 1, 0.1, 0.01, 0.001, 0.0001],  # kernel coefficient (R, P, S)
-                          'kernel': ["linear", "poly", "rbf", "sigmoid"]}  # SVM kernel (precomputed not supported)
-            svm_gs = GridSearchCV(svm_model, svm_params, n_jobs=4, cv=5)
-            svm_fitted = svm_gs.fit(X_train_CV, y_train.values.ravel())
-        else:
-            svm_fitted = svm_model.fit(X_train, y_train)
-
-        print(f"Training complete.") if verbose else None
-
-        # Testing + results
-        print(f"\nClassification Report [{sample_type.lower()}, {analyzer}, ngram_range(1,{i})]:\n "
-              f"{classification_report(y_test, svm_fitted.predict(X_test_CV), digits=6)}")
-
-
-""" MAIN """
+""" CONFIG """
 sample_size = 10000  # formerly 15000
 samples = "Both"
 analyzer = "word"
@@ -250,4 +251,4 @@ ngram_range = (1, 1)
 gridsearch = True
 dev = False
 
-main(verbose, sample_size, samples, analyzer, ngram_range, gridsearch)
+fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch)
