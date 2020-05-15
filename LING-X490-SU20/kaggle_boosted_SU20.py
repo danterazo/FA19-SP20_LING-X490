@@ -70,8 +70,8 @@ def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch):
 
 
 def get_data(dev, sample_size):
-    random_data = get_random_data(sample_size)
-    boosted_data = get_boosted_data(sample_size)
+    random_data = get_random_data()[0:sample_size]
+    boosted_data = get_boosted_data()[0:sample_size]
 
     # trim both to size if necessary. failsafe
     if len(random_data) is not len(boosted_data):
@@ -142,24 +142,27 @@ def read_data(dataset, delimiter, verbose=True):
 
 
 # already defined. just import
-def get_random_data(sample_size):
-    return read_data("train.random.csv", delimiter="comma")[0:sample_size]
+def get_random_data():
+    return read_data("train.random.csv", delimiter="comma")
 
 
 # TODO
-def get_boosted_data(sample_size):
-    data = read_data("train.target+comments.tsv", delimiter="tab")[0:sample_size]
+def get_boosted_data():
+    data = read_data("train.target+comments.tsv", delimiter="tab")
+    data_list = data.values.tolist()
 
     # debugging
-    filtered_data = filter_data(data, ["trump"])
-    print(f"trump:\n{filtered_data.head}")
+    filtered_data = filter_data(data)
+    print(f"trump dim: {len(filtered_data)}")
 
-    return data
+    # boost_data()
+    return filtered_data  # TODO: fix
 
 
 """ PROCESS DATA """
 
 
+# TODO
 # boosts data based on topics
 def boost_data():
     print(f"Boosting data...") if verbose else None
@@ -171,11 +174,13 @@ def boost_data():
 
 
 # return data that contains any word in Wordbank
-def filter_data(data, topics=[]):
+# NOTE: data[data["comment_text"].str.contains("example")] did NOT work so I had to read line-by-line
+def filter_data(data, topics=None):
     """
     data (df):          dataset to filter
-    topics ([str]]):    word(s) to filter with. bypasses wordbanks below
+    topics ([str]]):    word(s) to filter with. this wordbank bypasses the banks below
     """
+    print(f"Filtering data...") if verbose else None
 
     # source (built upon): https://dictionary.cambridge.org/us/topics/religion/islam/d
     islam_wordbank = ["allah", "caliphate", "fatwa", "hadj", "hajj", "halal", "headscarf", "hegira", "hejira",
@@ -233,17 +238,16 @@ def filter_data(data, topics=[]):
     topic = list(dict.fromkeys(topic))  # remove dupes
 
     wordbank = [t.lower() for t in topic]  # lowercase all in topic[]...
-    wordbank = wordbank + [capwords(w) for w in wordbank] + special_caps  # ...add capitalized versions...
-    wordbank = wordbank + ["#" + word for word in topic]  # ...then add hashtags for all words
+    # wordbank = wordbank + ["#" + word for word in topic]  # ...then add hashtags for all words
     wordbank = list(dict.fromkeys(wordbank))  # remove dupes again cause once isn't enough for some reason
     wordbank_regex = "|".join(wordbank)  # form "regex" string
 
     # idea: .find() for count. useful for threshold
-    topic_data = data[data["comment_text"].str.contains(wordbank_regex)]  # filter data
-    return topic_data
+    filtered_data = data[data["comment_text"].str.contains(wordbank_regex, case=False)]  # filter data
+    return filtered_data
 
 
-""" CONFIG """
+""" SCRIPT CONFIG """
 sample_size = 10000  # formerly 15000
 samples = "Both"
 analyzer = "word"

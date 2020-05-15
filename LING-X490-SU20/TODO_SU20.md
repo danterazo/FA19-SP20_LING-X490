@@ -33,7 +33,14 @@
 # 4-30, 5-15 TODO
 - `lex.general` most common words + appearances
 - [] might be an issue with my code
-- should be 161K trump examples. if so, just use those
-    - 10K of trump examples
+- should be 176048 trump examples. if so, just use those
+    - `grep -i -c "trump" train.target+comments.tsv`
+    - 10K randomly sampled trump examples (?)
 - [] workshop, july 23, see email for details
 - [] compare manually-annotated lexicons (?)
+
+## Questions/comments for 2020-05-15
+- For Sandra: issue was I cut dataset down to sample size too early. so it was filtering on only the first 10000 comments
+- Define "boosting" and modify boost_data() appropriately (right now, it just filters)
+    - Q: "Is it just filtering or something more?"
+    - Refer to Wiegand, Sec. 3 (pg. 2)
