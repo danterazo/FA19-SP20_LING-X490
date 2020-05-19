@@ -28,6 +28,7 @@ def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch, m
     """
 
     # array of data. [[random X,y], [boosted_topic X,y], [boosted_wordbank X,y]]
+    # TODO: don't import others if only one is requested
     all_data = get_data(verbose, sample_size, manual_boost)
 
     # choose one or the other if applicable
@@ -145,28 +146,22 @@ def get_random_data():
     return read_data("train.random.csv", delimiter="comma")
 
 
-# TODO
 def get_boosted_data(manual_boost=None):
-    data_file = "train.target+comments.tsv"
+    data_file = "train.target+comments.tsv"  # only imports dataset once
     data = read_data(data_file, delimiter="tab")
 
-    boosted_data = filter_data(data, data_file, manual_boost)
-    boosted_data = boosted_data.sample(frac=1) # shuffle before returning
-    return boosted_data
+    return boost_data(data, data_file, manual_boost)
 
 
 """ PROCESS DATA """
 
-
-# TODO: remove?
-# boosts data based on topics
-def boost_data():
+# boosts data based on given topics or predefined wordbanks
+def boost_data(data, data_file, manual_boost=None):
     print(f"Boosting data...") if verbose else None
 
-    # hardcoded for baseLexicon. expandedLexicon features a float class vector
-    df = pd.read_csv(f"../data/kaggle_data/lexicon/baseLexicon.txt", sep='\t', header=None)
-    lexicon = pd.DataFrame(columns=["word", "part", "hate"])
-    pass
+    boosted_data = filter_data(data, data_file, manual_boost)
+    boosted_data = boosted_data.sample(frac=1)  # shuffle before returning
+    return boosted_data
 
 
 # return data that contains any word in Wordbank
