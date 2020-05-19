@@ -75,21 +75,13 @@ def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch, m
 
 def get_data(dev, sample_size, manual_boost):
     random_data = get_random_data()[0:sample_size]
-    boosted_topic_data = get_boosted_data()[0:sample_size]
-    boosted_wordbank_data = get_boosted_data(manual_boost)[0:sample_size]
-
-    # trim both to size if necessary. failsafe
-    # TODO: trim both `boosted` sets too
-    if len(random_data) is not len(boosted_topic_data):
-        min_sample_size = min(len(random_data), len(boosted_topic_data))
-
-        random_data = random_data[0:min_sample_size]  # trim
-        boosted_topic_data = boosted_topic_data[0:min_sample_size]  # trim
+    boosted_topic_data = get_boosted_data(manual_boost)[0:sample_size]
+    boosted_wordbank_data = get_boosted_data()[0:sample_size]
 
     # split data into X, y
     random_splits = split_data(random_data, dev)
     topic_splits = split_data(boosted_topic_data, dev)
-    wordbank_splits = []
+    wordbank_splits = split_data(boosted_wordbank_data, dev)
 
     # return data and identifiers
     return [[random_splits, "random"], [topic_splits, "boosted (topic)"], [wordbank_splits, "boosted (wordbank)"]]
@@ -159,6 +151,7 @@ def get_boosted_data(manual_boost=None):
     data = read_data(data_file, delimiter="tab")
 
     boosted_data = filter_data(data, data_file, manual_boost)
+    boosted_data = boosted_data.sample(frac=1) # shuffle before returning
     return boosted_data
 
 
