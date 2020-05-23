@@ -2,12 +2,7 @@
 # This file builds and exports data
 # Dante Razo, drazo
 import os
-import pandas as pd
 from kaggle_preprocessing import read_data, boost_data, sample_data
-
-""" GLOBAL VARIABLES """
-sample_size = 20000
-verbose = True
 
 
 # data headers: [y, X]
@@ -19,33 +14,34 @@ def get_train():
 
 
 # Gets 'n' posts, randomly selected, from the dataset. Then save to `.csv`
-def build_random(data):
+def build_random(data, sample_size, repeats=3):
+    to_export = []
     # sample + export
-    random1 = sample_data(data, sample_size)
-    random2 = sample_data(data, sample_size)
-    random3 = sample_data(data, sample_size)
-    export_data("random", [random1, random2, random3])
+    for i in range(0, repeats):
+        to_export.append(sample_data(data, sample_size))
+
+    export_data("random", to_export)
     pass
 
 
-def build_boosted(data, manual_boost):
+def build_boosted(data, manual_boost, sample_size, repeats=3):
     data_file = "train.target+comments.tsv"  # name for verbose prints
+    to_export = []
 
     # sample + export, topic
     boosted_topic_data = boost_data(data, data_file, manual_boost)
-    boosted_topic1 = sample_data(boosted_topic_data, sample_size)
-    boosted_topic2 = sample_data(boosted_topic_data, sample_size)
-    boosted_topic3 = sample_data(boosted_topic_data, sample_size)
-    export_data("topic", [boosted_topic1, boosted_topic2, boosted_topic3])
+    for i in range(0, repeats):
+        to_export.append(sample_data(boosted_topic_data, sample_size))
+
+    export_data("topic", to_export)
 
     # boost + sample + export, wordbank
     boosted_wordbank_data = boost_data(data, data_file)
-    boosted_wordbank1 = sample_data(boosted_wordbank_data, sample_size)
-    boosted_wordbank2 = sample_data(boosted_wordbank_data, sample_size)
-    boosted_wordbank3 = sample_data(boosted_wordbank_data, sample_size)
-    export_data("wordbank", [boosted_wordbank1, boosted_wordbank2, boosted_wordbank3])
 
-    # print(f"Verbose ")
+    for i in range(0, repeats):
+        to_export.append(sample_data(boosted_wordbank_data, sample_size))
+
+    export_data("wordbank", to_export)
     pass
 
 
@@ -62,15 +58,15 @@ def export_data(source, data, extension=".csv"):
 
 
 # builds one or both
-def build_main(choice, topic):
+def build_main(choice, topic, repeats, sample_size, verbose):
     """
     choice: choose which sample types to build. "random", "boosted", or "all"
     topic: topic for manual boosting
     """
     train = get_train()
 
-    build_random(train) if choice is "random" or "all" else None
-    build_boosted(train, topic) if choice is "boosted" or "all" else None
+    build_random(train, sample_size, repeats) if choice is "random" or "all" else None
+    build_boosted(train, topic, sample_size, repeats) if choice is "boosted" or "all" else None
     print(f"Datasets built.") if verbose else None
     pass
 

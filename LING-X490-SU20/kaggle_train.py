@@ -6,17 +6,12 @@ from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import classification_report
-import pandas as pd
-
+from sklearn.model_selection import KFold
 from kaggle_preprocessing import read_data
-from kaggle_build import build_main
-
-""" GLOBAL VARS """
-verbose = True  # if I didn't define it globally then I'd be passing it to every f() like a React prop
-system = "local"  # if defined as "server", will change relative paths for dept NLP server
+from kaggle_build import build_main as build_datasets
 
 
-def fit_data(rebuild, sample_size, samples, analyzer, ngram_range, gridsearch, manual_boost):
+def fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, repeats, verbose, sample_size):
     """
     verbose (boolean):  toggles print statements
     sample_size (int):  size of sampled datasets. If set too high, the smaller size will be used
@@ -28,109 +23,83 @@ def fit_data(rebuild, sample_size, samples, analyzer, ngram_range, gridsearch, m
     manual_boost ([str]):   use given array of strings for filtering instead of built-in wordbanks. Or pass `None`
     """
 
-    if rebuild:
-        build_main(samples, manual_boost)  # rebuild datasets, overwrite old ones, then continue
-        pass
+    build_datasets(samples, manual_boost, repeats, sample_size, verbose) if rebuild else None  # rebuild datasets
 
-    # list of list of data: [[[random1 y, X], [random2]]]
-    # array of data. [[random X,y], [boosted_topic X,y], [boosted_wordbank X,y]]
-    # TODO: change data delivery / storage
-    all_data = import_data()
-    # all_data = get_data(sample_size, manual_boost)
+    # create list of lists: [[random1, random2, random3], [topic1, topic2, topic3], [wordbank1, wordbank2, wordbank3]]
+    all_data = []
+    for x in ["random", "topic", "wordbank"]:
+        all_data.append((import_data(x), x))
 
-    # choose one or the other if applicable
+    # choose one or the other sample type if desired
     if samples is "random":
         all_data = all_data[0]
     elif samples is "boosted":
         all_data = all_data[1:2]
 
-    for sample in all_data:
-        data = sample[0]  # first member of tuple is an array of splits
-        sample_type = sample[1]  # second member of tuple is a string
+    for sample in all_data:  # for each sample type...
+        for i in range(1, repeats + 1):  # for each test...
+            data = sample[0][i]  # first member of tuple is the dataframe
+            sample_type = sample[1]  # second member of tuple is a string
 
-        X_train, X_test, y_train, y_test = data
+            # X_train, X_test, y_train, y_test = data
+            X = data.loc["comment_text"]  # initially reversed because it was easier to split that way
+            y = data.loc["class"]
 
-        # Feature engineering: Vectorizer. ML models need features, not just whole tweets
-        vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
-        print(f"Fitting {sample_type.capitalize()}-sample CV...") if verbose else None
-        X_train_CV = vec.fit_transform(X_train["comment_text"])
-        X_test_CV = vec.transform(X_test["comment_text"])
+            # 5-Fold cross validation
+            kf = KFold(n_splits=5, shuffle=False)
+            fold_num = 1  # k-fold increment
 
-        # Fitting the model
-        print(f"Training {sample_type.capitalize()}-sample SVM...") if verbose else None
+            for train_index, test_index in kf.split(data):
+                print(f"{sample_type.capitalize()}-sample pass {i}, fold {fold_num}") if verbose else None
+                X_train, X_test = X[train_index], X[test_index]
+                y_train, y_test = y[train_index], y[test_index]
 
-        if gridsearch:
-            svm_model = SVC()
-            svm_params = {'C': [0.1, 1, 10, 100, 1000],  # regularization param
-                          'gamma': ["scale", "auto", 1, 0.1, 0.01, 0.001, 0.0001],  # kernel coefficient (R, P, S)
-                          'kernel': ["linear", "poly", "rbf", "sigmoid"]}  # SVM kernel (precomputed not supported)
-            svm_gs = GridSearchCV(svm_model, svm_params, n_jobs=12, cv=5)
-            svm_fitted = svm_gs.fit(X_train_CV, y_train.values.ravel())
-            print(f"GridSearchCV SVM Best Params: {svm_gs.best_params_}")
-        else:
-            # GridSearchCV SVM Best Params: {'C': 1000, 'gamma': 0.001, 'kernel': 'rbf'}
-            svm_model = SVC(C=1000, kernel="rbf", gamma=0.001)  # GridSearch best params
-            svm_fitted = svm_model.fit(X_train, y_train)
+                # debugging
+                print(f"y_train: {y_train}")
 
-        print(f"Training complete.") if verbose else None
+                # Feature engineering w/ Vectorizer. ML models need features, not just whole tweets
+                vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
+                print(f"Fitting {sample_type.capitalize()}-sample CV...") if verbose else None
+                X_train_CV = vec.fit_transform(X_train)
+                X_test_CV = vec.transform(X_test)
 
-        # Testing + results
-        print(f"\nClassification Report [{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n "
-              f"{classification_report(y_test, svm_fitted.predict(X_test_CV), digits=6)}")
+                # Fitting the model
+                print(f"Training {sample_type.capitalize()}-sample SVM...") if verbose else None
+
+                if gridsearch:
+                    svm_model = SVC()
+                    svm_params = {'C': [0.1, 1, 10, 100, 1000],  # regularization param
+                                  'gamma': ["scale", "auto", 1, 0.1, 0.01, 0.001, 0.0001],
+                                  'kernel': ["linear", "poly", "rbf", "sigmoid"]}
+                    svm_gs = GridSearchCV(svm_model, svm_params, n_jobs=12, cv=5)
+                    svm_fitted = svm_gs.fit(X_train_CV, y_train.values.ravel())
+                    print(f"GridSearchCV SVM Best Params: {svm_gs.best_params_}")
+                else:
+                    # GridSearchCV SVM Best Params: {'C': 1000, 'gamma': 0.001, 'kernel': 'rbf'}
+                    svm_model = SVC(C=1000, kernel="rbf", gamma=0.001)  # GridSearch best params
+                    svm_fitted = svm_model.fit(X_train, y_train)
+
+                print(f"Training complete.") if verbose else None
+
+                # Testing + results
+                print(f"\nClassification Report [{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n "
+                      f"{classification_report(y_test, svm_fitted.predict(X_test_CV), digits=6)}")
+                j += 1
 
 
 """ IMPORT DATA """
 
 
-def get_data(dev, sample_size, manual_boost):
-    random_data, boosted_topic_data, boosted_wordbank_data = import_data()
+def import_data(sample_type):
+    to_return = []
 
-    # TODO: use all datasets
-    data = random_data[0]
+    for i in range(1, 4):
+        to_return.append(read_data(f"train.{sample_type}{i}.csv", delimiter="comma", verbose=False))
 
-    # split data into X, y
-    # TODO: don't split; let 5CV do the work
-    random_splits = split_data(random_data, dev)
-    topic_splits = split_data(boosted_topic_data, dev)
-    wordbank_splits = split_data(boosted_wordbank_data, dev)
-
-    # return data and identifiers
-    return [[random_splits, "random"], [topic_splits, "boosted (topic)"], [wordbank_splits, "boosted (wordbank)"]]
-
-
-def import_data():
-    random = []
-    topic = []
-    wordbank = []
-
-    for i in range(1, 3):
-        random.append(read_data(f"train.random{i}.csv", delimiter="comma"))
-        topic.append(read_data(f"train.topic{i}.csv", delimiter="comma"))
-        wordbank.append(read_data(f"train.wordbank{i}.csv", delimiter="comma"))
-
-    print(len(random))  # debugging, to remove
-    print(len(random[0]))
-    print(random[0][10])
-    return [random, topic, wordbank]
-
-
-# TODO: remove below
-# already saved as `.csv`. just import
-def get_random_data():
-    # TODO: import all three datasets at once + average results
-    return read_data("train.random1.csv", delimiter="comma")
-
-
-def get_boosted_data(manual_boost=None):
-    data_file = "train.target+comments.tsv"  # only imports dataset once
-    data = read_data(data_file, delimiter="tab")
-
-    boosted_data = boost_data(data, data_file, manual_boost)
-    return boosted_data
+    return to_return
 
 
 """ SCRIPT CONFIG """
-sample_size = 20000  # int
 samples = "all"  # "random", "boosted_topic", "boosted_wordbank", or "all"
 analyzer = "word"  # "char" or "word"
 ngram_range = (1, 3)  # int 2-tuple / couple
@@ -138,6 +107,9 @@ gridsearch = False  # bool. Leave 'FALSE'; best params hardcoded
 dev = False  # bool
 manual_boost = ["trump"]  # ["trump"]  # None, or an array of strings
 rebuild = False  # rebuild datasets + export
+repeats = 3  # number of datasets per sample type
+verbose = True  # suppresses prints if FALSE
+sample_size = 20000
 
 """ MAIN """
-fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch, manual_boost)
+fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, repeats, verbose, sample_size)

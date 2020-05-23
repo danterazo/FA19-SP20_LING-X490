@@ -3,15 +3,15 @@
 # Dante Razo, drazo
 import sklearn.metrics
 import pandas as pd
+import os
 import re
 
 """ GLOBAL VARIABLES """
-verbose = True
 system = "local"  # if defined as "server", will change relative paths for dept NLP server
 
 
 # read + process training data
-def read_data(dataset, delimiter):
+def read_data(dataset, delimiter, verbose=True):
     if system is "server":
         data_dir = "data/"  # NLP server file structure
     else:
@@ -71,10 +71,10 @@ def split_data(data, dev, shuffle=False):
 
 
 # boosts data based on given topics or predefined wordbanks
-def boost_data(data, data_file, manual_boost=None):
+def boost_data(data, data_file, verbose, manual_boost=None):
     print(f"Boosting data...") if verbose else None
 
-    boosted_data = filter_data(data, data_file, manual_boost)
+    boosted_data = filter_data(data, data_file, verbose, manual_boost)
 
     print(f"Data boosted!\n") if verbose else None
     return boosted_data
@@ -86,7 +86,7 @@ def sample_data(data, size):
 
 
 # return data that contains any word in Wordbank
-def filter_data(data, data_file, manual_boost=None):
+def filter_data(data, data_file, verbose, manual_boost=None):
     """
     data (df):          dataset to filter
     topics ([str]]):    word(s) to filter with. this wordbank bypasses the banks below
@@ -170,7 +170,7 @@ def parse_lexicon():
 
     Then, manually remove non-abusive examples
     """
-    data_dir = "../repos/lexicon-of-abusive-words/lexicons"  # common directory for all repos
+    data_dir = "../repos/lexicon-of-abusive-words/lexicons"  # common directory for all repos. assumes local sys
     dataset = "base"  # base | expanded
 
     names = ["word", "class"]
@@ -188,5 +188,6 @@ def parse_lexicon():
     abusive["manual"] = ""
     abusive = abusive[["word", "class", "manual"]]
 
-    abusive.to_csv("lexicon_wiegand_just-abusive.csv", index=False)  # save to `.csv`
+    filepath = os.path.join("../data/kaggle_data/lexicon", "lexicon_wiegand_just-abusive.csv")
+    abusive.to_csv(filepath, index=False)  # save to `.csv`
     pass
