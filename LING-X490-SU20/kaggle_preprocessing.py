@@ -184,4 +184,3 @@ def parse_lexicon():
 
     filepath = os.path.join("../data/kaggle_data/lexicon", "lexicon_wiegand_just-abusive.csv")
     abusive.to_csv(filepath, index=False)  # save to `.csv`
-    pass

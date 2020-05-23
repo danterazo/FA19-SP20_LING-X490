@@ -21,7 +21,6 @@ def build_random(data, sample_size, repeats=3):
         to_export.append(sample_data(data, sample_size))
 
     export_data("random", to_export)
-    pass
 
 
 def build_boosted(data, manual_boost, sample_size, repeats=3):
@@ -42,7 +41,6 @@ def build_boosted(data, manual_boost, sample_size, repeats=3):
         to_export.append(sample_data(boosted_wordbank_data, sample_size))
 
     export_data("wordbank", to_export)
-    pass
 
 
 # save data to `.tsv`, `.csv`, etc.
@@ -53,8 +51,6 @@ def export_data(source, data, extension=".csv"):
         filepath = os.path.join("../data/kaggle_data", f"train.{source}{i}{extension}")
         d.to_csv(filepath, index=False, header=False)
         i += 1
-
-    pass
 
 
 # builds one or both
@@ -68,7 +64,6 @@ def build_main(choice, topic, repeats, sample_size, verbose):
     build_random(train, sample_size, repeats) if choice is "random" or "all" else None
     build_boosted(train, topic, sample_size, repeats) if choice is "boosted" or "all" else None
     print(f"Datasets built.") if verbose else None
-    pass
 
 
 """ MAIN """
