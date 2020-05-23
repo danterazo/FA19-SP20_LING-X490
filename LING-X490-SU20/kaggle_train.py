@@ -46,22 +46,26 @@ def fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, 
         for i in range(1, repeats + 1):  # for each test...
             data = pd.DataFrame(sample[0][i])  # first member of tuple is the dataframe
             sample_type = sample[1]  # second member of tuple is a string
+            print(f"===== {sample_type.capitalize()}-sample: pass {i} =====") if verbose else None
 
             X = data["comment_text"]  # initially reversed because it was easier to separate that way
             y = data["class"]
 
+            print("Instantiating model pipeline...") if verbose else None  # TODO: new progress
             vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
             svc = SVC(C=1000, kernel="rbf", gamma=0.001)  # GridSearch best params
             clf = Pipeline([('vect', vec), ('svm', svc)])
+            # print("Pipeline (CountVec + SVM) instantiated.") if verbose else None  # TODO: new progress
 
-            vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
-            print(f"Fitting {sample_type.capitalize()}-sample CV...") if verbose else None
+            # get results
             k = 5  # number of folds
-
+            print(f"Training {sample_type.capitalize()}-sample SVM...") if verbose else None
             print(cross_validate(clf, X, y, cv=k))
-            print("SUCCESS")  # debugging, so is the one above. to remove
+            print("Training complete.")  # debugging, so is the one above. to remove
 
             """
+            print(f"Fitting {sample_type.capitalize()}-sample CV...") if verbose else None
+            
             # 5-Fold cross validation
             kf = KFold(n_splits=5, shuffle=False)
             fold_num = 1  # k-fold increment for prints
