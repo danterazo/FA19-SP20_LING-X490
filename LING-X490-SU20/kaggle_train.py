@@ -80,9 +80,9 @@ def fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, 
                 print(f"Training complete.") if verbose else None
 
                 # Testing + results
+                fold_num += 1
                 print(f"\nClassification Report [{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n "
                       f"{classification_report(y_test, svm_fitted.predict(X_test_CV), digits=6)}")
-                j += 1
 
 
 def import_data(sample_type):

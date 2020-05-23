@@ -6,16 +6,10 @@ import pandas as pd
 import os
 import re
 
-""" GLOBAL VARIABLES """
-system = "local"  # if defined as "server", will change relative paths for dept NLP server (for training data ONLY)
-
 
 # read + process training data
 def read_data(dataset, delimiter, verbose=True):
-    if system is "server":
-        data_dir = "data/"  # NLP server file structure
-    else:
-        data_dir = "../data/kaggle_data"  # common directory for all datasets
+    data_dir = "../data/kaggle_data"  # common directory for all datasets
 
     print(f"Importing `{dataset}`...") if verbose else None  # progress indicator
     data_list = []  # temporary; used for constructing dataframe

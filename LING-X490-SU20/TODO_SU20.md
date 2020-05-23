@@ -84,8 +84,8 @@
         - move data import / filtering code to kaggle_build?
     - don't worry about splits, bc 5CV
     - [x] Random x3
-    - [] Topic x3
-    - [] Wordbank x3
+    - [x] Topic x3
+    - [x] Wordbank x3
 - after all that:
     - [] Compare 3 manually annotated lexicons, minus Brooklyn's
     - [] save to another `.csv`
