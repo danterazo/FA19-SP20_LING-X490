@@ -1,6 +1,7 @@
 # LING-X 490
 # This file builds and exports data
 # Dante Razo, drazo
+import os
 import pandas as pd
 from kaggle_preprocessing import read_data, boost_data, sample_data
 
@@ -8,6 +9,8 @@ from kaggle_preprocessing import read_data, boost_data, sample_data
 sample_size = 20000
 verbose = True
 
+
+# data headers: [y, X]
 
 # only import once
 def get_train():
@@ -51,7 +54,8 @@ def export_data(source, data, extension=".csv"):
     i = 1
 
     for d in data:
-        d.to_csv(f"train.{source}{i}{extension}", index=False, header=False)
+        filepath = os.path.join("../data/kaggle_data", f"train.{source}{i}{extension}")
+        d.to_csv(filepath, index=False, header=False)
         i += 1
 
     pass
@@ -76,5 +80,5 @@ def build_main(choice, topic):
 topic = ["trump"]  # [str]
 to_build = "all"  # "all", "random", or "boosted"
 
-# run
-build_main(to_build, topic)
+# manually run:
+# build_main(to_build, topic)
