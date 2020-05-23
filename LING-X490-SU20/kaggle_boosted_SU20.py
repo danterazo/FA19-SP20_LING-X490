@@ -81,7 +81,7 @@ def fit_data(verbose, sample_size, samples, analyzer, ngram_range, gridsearch, m
 def get_data(dev, sample_size, manual_boost):
     random_data = get_random_data()[0:sample_size]
     boosted_topic_data = get_boosted_data(manual_boost)
-    boosted_wordbank_data = get_boosted_data()[0:sample_size]
+    boosted_wordbank_data = get_boosted_data()
 
     # export topic 3x
     boosted_topic1 = boosted_topic_data.sample(frac=1)[0:sample_size]
