@@ -7,7 +7,7 @@ import os
 import re
 
 """ GLOBAL VARIABLES """
-system = "local"  # if defined as "server", will change relative paths for dept NLP server
+system = "local"  # if defined as "server", will change relative paths for dept NLP server (for training data ONLY)
 
 
 # read + process training data

@@ -11,6 +11,7 @@ from kaggle_preprocessing import read_data
 from kaggle_build import build_main as build_datasets
 
 
+# for each fold of each dataset of each sample type, train an SVM
 def fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, repeats, verbose, sample_size):
     """
     verbose (boolean):  toggles print statements
@@ -53,9 +54,6 @@ def fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, 
                 print(f"{sample_type.capitalize()}-sample pass {i}, fold {fold_num}") if verbose else None
                 X_train, X_test = X[train_index], X[test_index]
                 y_train, y_test = y[train_index], y[test_index]
-
-                # debugging
-                print(f"y_train: {y_train}")
 
                 # Feature engineering w/ Vectorizer. ML models need features, not just whole tweets
                 vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
