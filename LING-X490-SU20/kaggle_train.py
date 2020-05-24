@@ -4,6 +4,7 @@
 
 from kaggle_preprocessing import read_data
 from kaggle_build import build_main as build_datasets
+from kaggle_build import export_df
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import cross_validate
 from sklearn.pipeline import Pipeline
@@ -50,18 +51,19 @@ def fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, 
             y = data["class"]
 
             # Model pipeline
-            print("Instantiating model pipeline...") if verbose else None
+            print("Instantiating model pipeline (CV & SVM)...") if verbose else None
             vec = CountVectorizer(analyzer="word", ngram_range=ngram_range)
             svc = SVC(C=1000, kernel="rbf", gamma=0.001)  # GridSearch best params
             clf = Pipeline([('vect', vec), ('svm', svc)])
 
             # Testing + results
             k = 5  # number of folds
-            print(f"Training {sample_type.capitalize()}-sample SVM...") if verbose else None
+            print(f"Fitting CountVectorizer & training {sample_type.capitalize()}-sample SVM...") if verbose else None
 
             scoring = ['precision_macro', 'recall_macro', 'f1_macro', 'accuracy']
             scores = cross_validate(clf, X, y, cv=k, n_jobs=12, scoring=scoring, return_train_score=True)
             print("Training complete.")  # debugging, so is the one above. to remove
+            export_df(scores, sample, i)
             print(f"Report [{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n "
                   f"{pd.DataFrame.from_dict(scores)}")
             i += 1
