@@ -7,9 +7,12 @@ from kaggle_build import build_main as build_datasets
 from kaggle_build import export_df
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import cross_validate, cross_val_predict
+from sklearn.metrics import classification_report
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 import pandas as pd
+import os.path
+from os import path
 
 run = 1  # convenient flag at top of file
 
@@ -62,16 +65,18 @@ def fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, ver
             k = 5  # number of folds
             print(f"Fitting CountVectorizer & training {sample_type.capitalize()}-sample SVM...") if verbose else None
 
-            scoring = ['precision_macro', 'recall_macro', 'f1_macro', 'accuracy']
-            # y_pred = cross_val_predict(clf, X, y, cv=k, n_jobs=14)
+            # TODO: if pred file exists, don't retrain
+            filepath = os.path.join("pred/", f"pred.{sample}{i}.csv")
+            if path.exists(filepath):
+                y_pred = pd.read_csv(filepath)  # import if `y_pred` has already been computed
+            else:
+                y_pred = cross_val_predict(clf, X, y, cv=k, n_jobs=14)  # else: compute
 
-            scores_dict = cross_validate(clf, X, y, cv=k, n_jobs=14, scoring=scoring, return_train_score=True)
-            scores_df = pd.DataFrame.from_dict(scores_dict)
-            print("Training complete.\n")  # debugging, so is the one above. to remove
+            export_df(pd.DataFrame(y_pred), sample_type, i, path="pred/", prefix="pred", index=False)  # save preds
 
-            # TODO: cross_val_predict + save `y_pred` to file, "\pred\pred.random1.csv"
-            export_df(scores_df, sample_type, i, path="output/", filename="report")
-            print(f"Report [{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n {scores_df}\n")
+            report = pd.DataFrame(classification_report(y, y_pred, output_dict=True)).transpose()
+            print(f"\nClassification Report[{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n{report}\n")
+            export_df(report, sample_type, i, path="output/", prefix="report")
             i += 1
 
 
