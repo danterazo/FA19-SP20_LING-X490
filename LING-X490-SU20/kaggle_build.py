@@ -54,8 +54,8 @@ def export_data(source, data, extension=".csv"):
 
 
 # generalized version of the above. save data to `.tsv`, `.csv`, etc.
-def export_df(data, sample, index, extension=".csv"):
-    filepath = os.path.join(f"output/", f"report.{sample}{index}{extension}")
+def export_df(data, sample="no_sample", index="", path="", filename="", extension=".csv"):
+    filepath = os.path.join(path, f"{filename}.{sample}{index}{extension}")
     data.to_csv(filepath, index=True, header=True)
 
 

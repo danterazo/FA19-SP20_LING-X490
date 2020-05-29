@@ -66,8 +66,8 @@ def fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, 
             scores_df = pd.DataFrame.from_dict(scores_dict)
             print("Training complete.\n")  # debugging, so is the one above. to remove
 
-            # TODO: automatically average dataframes together; 3x output instead of 9x
-            export_df(scores_df, sample_type, i)
+            # TODO: cross_val_predict + save `y_pred` to file, "\pred\pred.random1.csv"
+            export_df(scores_df, sample_type, i, path="output/", filename="report")
             print(f"Report [{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n {scores_df}\n")
             i += 1
 
@@ -93,4 +93,4 @@ verbose = True  # suppresses prints if FALSE
 sample_size = 20000
 
 """ MAIN """
-fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, repeats, verbose, sample_size)
+# fit_data(rebuild, samples, analyzer, ngram_range, gridsearch, manual_boost, repeats, verbose, sample_size)

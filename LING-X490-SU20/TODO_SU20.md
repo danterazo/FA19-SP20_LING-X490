@@ -70,7 +70,7 @@
         3. `dev` doesn't matter anymore, reimplement
             - also, `dev` is used until last step. then `test`
 
- 
+
 # 2020-05-22
 - interpreting results
     - look at `macro avg`, takes into account more than just avg
@@ -90,4 +90,13 @@
     - [] Compare 3 manually annotated lexicons, minus Brooklyn's
     - [] save to another `.csv`
     - [] filter on lexicon to see how many explicitly abusive comments there are based on OUR lexicon
-    - [] next step: sample 20000, but only explicit or implicit.
+    - [] next step: sample 20000, but only explicit or implicit
+
+
+# 2020-05-29
+- Ask Sandra to look at final lexicon. We need to decide which words to use
+    - cross-checking original author offensive words with ours
+- new report row -> average of all columns
+- save output using `https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_predict.html#sklearn.model_selection.cross_val_predict`
+    - then send that off to `classification_report()`
+- don't hear back from Sandra in three days? message again

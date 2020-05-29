@@ -1,6 +1,7 @@
 # LING-X 490
 # This standalone file takes existing data and reformats / averages it
 # Dante Razo, drazo
+from kaggle_build import export_df
 import pandas as pd
 import numpy as np
 import os
@@ -13,7 +14,6 @@ def compare_lexicons():
     os.chdir(path)
     files = glob.glob('*.{}'.format("csv")) + glob.glob('*.{}'.format("tsv"))
     dfs = []
-    authors = []
 
     # assumes they're all the same length (551, as was the provided lexicon)
     for filename in files:
@@ -26,13 +26,14 @@ def compare_lexicons():
         elif author == "schaede":  # schaede
             dfs.append(lexicon_schaede(filename))
 
-        authors.append(author)
+    df = pd.concat(dfs, axis=1)  # one big dataframe
+    df = df.loc[:, ~df.columns.duplicated()]  # remove duplicate "word" columns
+    df["avg"] = df[df.columns[1:]].mean(axis=1)  # average class columns
+    df["var"] = df[df.columns[1:]].var(axis=1)  # variance of class columns
 
-    # TODO: conflate values (0, 1, 2)
-    # TODO: then, average columns + return that / save to csv
-    df = pd.concat(dfs)  # one big dataframe
-
-    print(df)  # debugging
+    df["class"] = False
+    df.loc[df.avg > 0.6, "class"] = True  # i.e. at least 2 people say its mildly
+    export_df(df, sample="all", filename="lexicon.manual")
 
 
 """ IMPORTS """
@@ -42,7 +43,6 @@ def compare_lexicons():
 def lexicon_dante(filename):
     df = pd.read_csv(filename)[["word", "pass2"]]
     df.columns = ["word", "dante"]
-    df["dante"] = df["dante"].astype(float)
     return df
 
 
@@ -55,13 +55,13 @@ def lexicon_dd(filename):
         manual_class = str(x).lower()
 
         if manual_class == "very abusive":
-            class_vec.append(2.0)
+            class_vec.append(2)
         elif manual_class == "mildly abusive":
-            class_vec.append(1.0)
+            class_vec.append(1)
         elif manual_class == "not abusive":
-            class_vec.append(0.0)
+            class_vec.append(0)
         else:
-            class_vec.append(None)
+            class_vec.append(np.NaN)
 
     df["dd"] = class_vec
     df = df[["word", "dd"]]
@@ -78,13 +78,13 @@ def lexicon_schaede(filename):
         manual_class = str(x).lower()
 
         if manual_class == "very abusive":
-            class_vec.append(2.0)
+            class_vec.append(2)
         elif manual_class == "mildly abusive":
-            class_vec.append(1.0)
+            class_vec.append(1)
         elif manual_class == "not abusive":
-            class_vec.append(0.0)
+            class_vec.append(0)
         else:
-            class_vec.append(None)
+            class_vec.append(np.NaN)
 
     df["schaede"] = class_vec
     df = df[["word", "schaede"]]
