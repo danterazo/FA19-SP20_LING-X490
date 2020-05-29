@@ -6,7 +6,7 @@ from kaggle_preprocessing import read_data
 from kaggle_build import build_main as build_datasets
 from kaggle_build import export_df
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import cross_validate, cross_val_predict
+from sklearn.model_selection import cross_val_predict
 from sklearn.metrics import classification_report
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
