@@ -48,8 +48,8 @@ def fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, ver
 
         for set in sample[0]:  # for each set...
             data = pd.DataFrame(set)  # first member of tuple is the dataframe
-            sample_type = sample[1]  # second member of tuple is a string
-            print(f"===== {sample_type.capitalize()}-sample: pass {i} =====") if verbose else None
+            sample_type = sample[1].capitalize()  # second member of tuple is a string
+            print(f"===== {sample_type}-sample: pass {i} =====") if verbose else None
 
             # Store data as vectors
             X = data["comment_text"]  # initially reversed because it was easier to separate that way
@@ -63,16 +63,17 @@ def fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, ver
 
             # Testing + results
             k = 5  # number of folds
-            print(f"Fitting CountVectorizer & training {sample_type.capitalize()}-sample SVM...") if verbose else None
 
             # TODO: if pred file exists, don't retrain
-            filepath = os.path.join("pred/", f"pred.{sample}{i}.csv")
+            filepath = os.path.join("pred/", f"pred.{sample_type.lower()}{i}.csv")
+
             if path.exists(filepath):
+                print(f"Importing {sample_type}-sample SVM predictions...") if verbose else None
                 y_pred = pd.read_csv(filepath)  # import if `y_pred` has already been computed
             else:
-                y_pred = cross_val_predict(clf, X, y, cv=k, n_jobs=14)  # else: compute
-
-            export_df(pd.DataFrame(y_pred), sample_type, i, path="pred/", prefix="pred", index=False)  # save preds
+                print(f"Fitting CountVectorizer & training {sample_type}-sample SVM...") if verbose else None
+                y_pred = cross_val_predict(clf, X, y, cv=k, n_jobs=14)  # else, compute
+                export_df(pd.DataFrame(y_pred), sample_type, i, path="pred/", prefix="pred", index=False)  # save preds
 
             report = pd.DataFrame(classification_report(y, y_pred, output_dict=True)).transpose()
             print(f"\nClassification Report[{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n{report}\n")
