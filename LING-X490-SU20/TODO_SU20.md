@@ -96,7 +96,8 @@
 # 2020-05-29
 - Ask Sandra to look at final lexicon. We need to decide which words to use
     - cross-checking original author offensive words with ours
-- new report row -> average of all columns
-- save output using `https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_predict.html#sklearn.model_selection.cross_val_predict`
-    - then send that off to `classification_report()`
+- ~~new report row -> average of all columns~~
+- [x] save output using `https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_predict.html#sklearn.model_selection.cross_val_predict`
+    - [x] then send that off to `classification_report()`
 - don't hear back from Sandra in three days? message again
+- script README w/ config, setup, etc.
