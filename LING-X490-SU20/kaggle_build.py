@@ -1,8 +1,9 @@
 # LING-X 490
-# This file builds and exports data
+# This file builds, imports, and exports data
 # Dante Razo, drazo
-import os
 from kaggle_preprocessing import read_data, boost_data, sample_data
+import pandas as pd
+import os
 
 
 # data headers: [y, X]
@@ -10,7 +11,7 @@ from kaggle_preprocessing import read_data, boost_data, sample_data
 # only import once
 def get_train():
     dataset = "train.target+comments.tsv"  # 'test' for classification problem
-    return read_data(dataset, delimiter="tab")
+    return read_data(dataset)
 
 
 # Gets 'n' posts, randomly selected, from the dataset. Then save to `.csv`
@@ -70,6 +71,38 @@ def build_main(choice, topic, repeats, sample_size, verbose):
     build_random(train, sample_size, repeats) if choice is "random" or "all" else None
     build_boosted(train, topic, sample_size, repeats) if choice is "boosted" or "all" else None
     print(f"Datasets built.") if verbose else None
+
+
+# import Wiegand's lexicon, format it, and export it
+# in `kaggle_build.py` because it isn't dynamic, i.e. the output is the same after every run
+def build_lexicon():
+    """ GOAL: create three-dimensional data
+    1. Word
+    2. Part of speech
+    3. Class
+
+    Then, manually remove non-abusive examples
+    """
+    data_dir = "../repos/lexicon-of-abusive-words/lexicons"  # common directory for all repos. assumes local sys
+    dataset = "base"  # base | expanded
+
+    names = ["word", "class"]
+    data = pd.read_csv(f"{data_dir}/{dataset}Lexicon.txt", sep='\t', header=None, names=names)  # import Kaggle data
+
+    split = [w.split("_") for w in data["word"]]  # split word and PoS
+
+    data["part"] = [s[1] for s in split]  # remove PoS from words
+    data["word"] = [s[0] for s in split]
+
+    data.to_csv("lexicon_wiegand.csv", index=False)  # save to `.csv`
+
+    # also export a lexicon of ONLY abusive words
+    abusive = data[data["class"]]
+    abusive["manual"] = ""
+    abusive = abusive[["word", "class", "manual"]]
+
+    filepath = os.path.join("../data/kaggle_data/lexicon", "lexicon.wiegand.abusive.csv")
+    abusive.to_csv(filepath, index=False)  # save to `.csv`
 
 
 """ MAIN """

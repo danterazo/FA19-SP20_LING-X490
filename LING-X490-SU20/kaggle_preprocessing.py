@@ -1,31 +1,30 @@
 # LING-X490 SU20:
-# This file imports and processes data for use in SVM
+# This file imports, formats, and processes data for use in SVM
 # Dante Razo, drazo
-import sklearn.metrics
 import pandas as pd
-import os
 import re
 
 
 # read + process training data
-def read_data(dataset, delimiter="csv", verbose=True):
+def read_data(dataset, verbose=True):
     data_dir = "../data/kaggle_data"  # common directory for all datasets
 
     print(f"Importing `{dataset}`...") if verbose else None  # progress indicator
     data_list = []  # temporary; used for constructing dataframe
+    extension = dataset[-4:]
 
     # import data
     with open(f"{data_dir}/{dataset}", "r", encoding="utf-8") as d:
         entries = d.readlines()
 
         for e in entries:
-            if delimiter is "tab":  # tsv
+            if extension == ".tsv":
                 split_line = e.split("\t", 1)
             else:  # default: csv
                 split_line = e.split(",", 1)
 
             if len(split_line) is 2:  # else: there's no score, so throw the example out
-                data_list.append([float(split_line[0]), str(split_line[1])])
+                data_list.append([float(split_line[0].strip()), str(split_line[1])])
 
     data = pd.DataFrame(data_list, columns=["score", "comment_text"])
     print(f"Data {data.shape} imported!\n") if verbose else None  # progress indicator
@@ -44,28 +43,20 @@ def read_data(dataset, delimiter="csv", verbose=True):
     return data
 
 
-# boosts data based on given topics or predefined wordbanks
-def boost_data(data, data_file, verbose, manual_boost=None):
-    print(f"Boosting data...") if verbose else None
-
-    boosted_data = filter_data(data, data_file, verbose, manual_boost)
-
-    print(f"Data boosted!\n") if verbose else None
-    return boosted_data
-
-
 # shuffle data then sample from it
 def sample_data(data, size):
     return data.sample(frac=1)[0:size]
 
 
-# return data that contains any word in Wordbank
-def filter_data(data, data_file, verbose, manual_boost=None):
+# boosts data, i.e. returns data that contains any word in given Wordbank
+def boost_data(data, data_file, verbose=True, manual_boost=None):
     """
     data (df):          dataset to filter
     topics ([str]]):    word(s) to filter with. this wordbank bypasses the banks below
     """
     if verbose:
+        print(f"Boosting data...") if verbose else None
+
         if manual_boost:
             print(f"Filtering `{data_file}` on {manual_boost}...")
         else:
@@ -133,34 +124,5 @@ def filter_data(data, data_file, verbose, manual_boost=None):
     # idea: .find() for count. useful for threshold
     filtered_data = data[data["comment_text"].str.contains(wordbank_regex)]
     print(f"Data filtered to size {filtered_data.shape[0]}.") if verbose else None
+    print(f"Data boosted!\n") if verbose else None
     return filtered_data
-
-
-def parse_lexicon():
-    """ GOAL: create three-dimensional data
-    1. word
-    2. Part of speech
-    3. Class
-
-    Then, manually remove non-abusive examples
-    """
-    data_dir = "../repos/lexicon-of-abusive-words/lexicons"  # common directory for all repos. assumes local sys
-    dataset = "base"  # base | expanded
-
-    names = ["word", "class"]
-    data = pd.read_csv(f"{data_dir}/{dataset}Lexicon.txt", sep='\t', header=None, names=names)  # import Kaggle data
-
-    split = [w.split("_") for w in data["word"]]  # split word and PoS
-
-    data["part"] = [s[1] for s in split]  # remove PoS from words
-    data["word"] = [s[0] for s in split]
-
-    data.to_csv("lexicon_wiegand.csv", index=False)  # save to `.csv`
-
-    # also export a lexicon of ONLY abusive words
-    abusive = data[data["class"]]
-    abusive["manual"] = ""
-    abusive = abusive[["word", "class", "manual"]]
-
-    filepath = os.path.join("../data/kaggle_data/lexicon", "lexicon_wiegand_just-abusive.csv")
-    abusive.to_csv(filepath, index=False)  # save to `.csv`

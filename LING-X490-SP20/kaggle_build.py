@@ -34,7 +34,7 @@ def get_abusive():
     abusive["manual"] = ""
     abusive = abusive[["word", "class", "manual"]]
 
-    abusive.to_csv("lexicon_just-abusive.csv", index=False)  # save to `.csv`
+    abusive.to_csv("lexicon.wiegand.abusive.csv", index=False)  # save to `.csv`
     return abusive
 
 

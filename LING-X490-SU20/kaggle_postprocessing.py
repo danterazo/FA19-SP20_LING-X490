@@ -1,8 +1,8 @@
 # LING-X 490
-# This standalone file takes existing data and reformats / averages it
+# This standalone file takes built data and reformats / averages / analyzes it
 # Dante Razo, drazo
-from kaggle_build import export_df
-from kaggle_preprocessing import read_data
+from kaggle_build import export_df, get_train
+from kaggle_preprocessing import boost_data
 import pandas as pd
 import numpy as np
 import os
@@ -34,13 +34,31 @@ def compare_lexicons():
 
     df["class"] = False
     df.loc[df.avg > 0.6, "class"] = True  # i.e. at least 2 people say its mildly
-    export_df(df, sample="all", prefix="lexicon.manual")
+    export_df(df, sample="all", prefix="lexicon.manual")  # export it too
 
 
-def lexicon_percentage():
-    df = read_data("train")
+# calculate % examples in given data that contains abusive words
+def percent_abusive(data, lex):
+    """
+    data (df): dataframe to filter
+    lex (str): lexicon to filter with. Either "we" (wiegand extended) or "rds" (our manually tagged dataset)
+    """
 
-    # TODO: calculate percentage of OUR lexicon
+    filename = ""
+    boost_list = []
+    if lex == "rds":  # Razo, DD, Shaede
+        filename = "../data/kaggle_data/lexicon_manual/lexicon.manual.all.csv"
+        lexicon_rds = pd.read_csv(filename, sep=",", header=0)
+        lexicon_rds = lexicon_rds[lexicon_rds["class"] == 1]  # only use abusive words (class=1)
+        boost_list = list(lexicon_rds["word"])
+    elif lex == "we":  # Wiegand
+        filename = "../data/kaggle_data/lexicon/lexicon.wiegand.abusive.csv"
+        lexicon_wiegand = pd.read_csv(filename, sep=",", header=0)
+        boost_list = list(lexicon_wiegand["word"])  # todo: actually use expanded lexion
+
+    # boost
+    boosted_df = boost_data(data, data_file=filename, verbose=False, manual_boost=boost_list)
+    return len(boosted_df) / len(data) * 100
 
 
 """ CLEAN IMPORTED DATA """
@@ -100,4 +118,3 @@ def lexicon_schaede(filename):
 
 """ MAIN """
 # compare_lexicons()
-lexicon_percentage()

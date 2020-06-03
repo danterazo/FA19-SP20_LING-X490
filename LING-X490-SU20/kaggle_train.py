@@ -3,6 +3,7 @@
 # Dante Razo, drazo, 2020-05-15
 
 from kaggle_preprocessing import read_data
+from kaggle_postprocessing import percent_abusive
 from kaggle_build import build_main as build_datasets
 from kaggle_build import export_df
 from sklearn.feature_extraction.text import CountVectorizer
@@ -18,7 +19,7 @@ run = 1  # convenient flag at top of file
 
 
 # for each fold of each dataset of each sample type, train an SVM
-def fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, verbose, sample_size):
+def fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, verbose, sample_size, calc_pct):
     """
     rebuild (bool):     if TRUE, rebuild + rewrite the following datasets:
     samples ([str]):    three modes: "random", "boosted", or "all"
@@ -28,6 +29,7 @@ def fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, ver
     repeats (int):      controls the number of datasets built per sample type (if `rebuild` is TRUE)
     verbose (boolean):  toggles print statements
     sample_size (int):  size of sampled datasets. If set too high, the smaller size will be used
+    calc_pct (str):     "we" (wiegend extended), "rds" (manual), "both", or "none". calc % of abusive pts per sample
     """
 
     build_datasets(samples, manual_boost, repeats, sample_size, verbose) if rebuild else None  # rebuild datasets
@@ -64,17 +66,28 @@ def fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, ver
             # Testing + results
             k = 5  # number of folds
 
-            # TODO: if pred file exists, don't retrain
             filepath = os.path.join("pred/", f"pred.{sample_type.lower()}{i}.csv")
 
             if path.exists(filepath):
                 print(f"Importing {sample_type}-sample SVM predictions...") if verbose else None
                 y_pred = pd.read_csv(filepath)  # import if `y_pred` has already been computed
+                print(f"Data imported!") if verbose else None
             else:
                 print(f"Fitting CountVectorizer & training {sample_type}-sample SVM...") if verbose else None
                 y_pred = cross_val_predict(clf, X, y, cv=k, n_jobs=14)  # else, compute
                 pd.DataFrame(y_pred).to_csv(filepath, index=False)  # save preds
+                print(f"SVM trained!") if verbose else None
 
+            # calculate % abusive
+
+            print(f"\nCalculating abusive content percentage(s)...\n") if calc_pct != "none" else None
+            if calc_pct == "rds" or calc_pct == "both":
+                print(f"{percent_abusive(data, 'rds')}% abusive (manual lexicon)")
+
+            if calc_pct == "we" or calc_pct == "both":
+                print(f"{percent_abusive(data, 'we')}% abusive (Wiegand expanded lexicon)")
+
+            # report results + export
             report = pd.DataFrame(classification_report(y, y_pred, output_dict=True)).transpose()
             print(f"\nClassification Report[{sample_type.lower()}, {analyzer}, ngram_range{ngram_range}]:\n{report}\n")
             export_df(report, sample_type, i, path="output/", prefix="report")
@@ -85,7 +98,7 @@ def import_data(sample_type):
     to_return = []
 
     for i in range(1, 4):
-        to_return.append(read_data(f"train.{sample_type}{i}.csv", delimiter="comma", verbose=False))
+        to_return.append(read_data(f"train.{sample_type}{i}.csv", verbose=False))
 
     return to_return
 
@@ -98,7 +111,9 @@ manual_boost = ["trump"]  # ["trump"]  # None, or an array of strings
 rebuild = False  # rebuild datasets + export
 repeats = 3  # number of datasets per sample type
 verbose = True  # suppresses prints if FALSE
+calc_pct = "both"  # calculate abusive example percentage per sample. expensive
 sample_size = 20000
 
 """ MAIN """
-fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, verbose, sample_size) if run else None
+fit_data(rebuild, samples, analyzer, ngram_range, manual_boost, repeats, verbose, sample_size,
+         calc_pct) if run else None
